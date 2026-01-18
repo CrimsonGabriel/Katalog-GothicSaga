@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wstęp wzbroniony - Gothic Saga</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+        body {
+            background-color: #050505;
+            color: #d4af37;
+            font-family: 'Cinzel', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-image: radial-gradient(circle, #1a0f0f 0%, #000000 90%);
+        }
+
+        .container {
+            text-align: center;
+            border: 2px solid #5a4a42;
+            padding: 40px;
+            background: rgba(20, 10, 5, 0.9);
+            box-shadow: 0 0 50px rgba(180, 50, 0, 0.3);
+            max-width: 600px;
+            border-radius: 5px;
+            position: relative;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: -10px; left: -10px; right: -10px; bottom: -10px;
+            border: 1px solid #3e2b22;
+            z-index: -1;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #ff3333;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        p {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #c0a080;
+        }
+
+        .guard-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 30px;
+            border: 1px solid #d4af37;
+            color: #d4af37;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: 0.3s;
+            background: transparent;
+        }
+
+        .btn:hover {
+            background: #d4af37;
+            color: #000;
+            box-shadow: 0 0 20px #d4af37;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <span class="guard-icon">⚔️</span>
+        <h1>STÓJ!</h1>
+        <p>
+            Co Ty tutaj robisz, śmieciu?<br>
+            Magiczna bariera nie pozwala wynosić przedmiotów poza ten świat.
+        </p>
+        <p>
+            Twoja próba kradzieży została odnotowana. <br>
+            Wracaj do kolonii, póki strażnicy mają dobry humor.
+        </p>
+        
+        <a href="/" class="btn">Wracam do szeregu</a>
+    </div>
+
+</body>
+</html>
