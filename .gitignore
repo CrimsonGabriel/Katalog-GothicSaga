@@ -1,8 +1,8 @@
 # Oryginalne modele GLB - nie wrzucać do repo!
-assets/models/sources/
+# assets/models/sources/
 
 # Zakodowane modele SGM - trzymamy tylko lokalnie
-assets/models/*.sgm
+# assets/models/*.sgm
 
 # Node
 node_modules/
