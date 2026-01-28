@@ -1,40 +1,15 @@
-# This .gitignore is appropriate for repositories deployed to GitHub Pages and using
-# a Gemfile as specified at https://github.com/github/pages-gem#conventional
+# Oryginalne modele GLB - nie wrzucać do repo!
+assets/models/sources/
 
-# Basic Jekyll gitignores (synchronize to Jekyll.gitignore)
-_site/
-.sass-cache/
-.jekyll-cache/
-.jekyll-metadata
+# Zakodowane modele SGM - trzymamy tylko lokalnie
+assets/models/*.sgm
 
-# Additional Ruby/bundler ignore for when you run: bundle install
-/vendor
+# Node
+node_modules/
 
-# Specific ignore for GitHub Pages
-# GitHub Pages will always use its own deployed version of pages-gem 
-# This means GitHub Pages will NOT use your Gemfile.lock and therefore it is
-# counterproductive to check this file into the repository.
-# Details at https://github.com/github/pages-gem/issues/768
-Gemfile.lock
-assets/dane/test.json
-Lista Broni(in progress).csv
-Lista itemów - KM.csv
-Lista itemów - addon armors koz.csv
-Lista itemów - saga 2.csv
-Lista itemów - vanilla g2nk .csv
-Lista mebli (in progress).csv
-Lista Pancerzy(in progress).csv
-/node_modules
-update_json_data.js
-Spis run.csv
-package.json
-package-lock.json
-1h2h.js
-Lista Broni.csv
-Lista mebli.csv
-update_json_with_details.js
-update_from_csv.js
-Itemki.csv
-Itemki.xlsx
-(robocze) 20250905 Gothic Saga 3 - all instancje z modelami.xlsx
-Dzifko tajlandzka.xlsx
+# System
+.DS_Store
+Thumbs.db
+
+# Stare archiwum
+*.zip

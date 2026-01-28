@@ -1,12 +1,10 @@
-// Blokady "psychologiczne" dla amatorów
-document.addEventListener('contextmenu', event => event.preventDefault()); 
-
-document.onkeydown = function(e) {
-    if(e.keyCode == 123) return false; // F12
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) return false; // Ctrl+Shift+I
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) return false; // Ctrl+Shift+J
-    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) return false; // Ctrl+U
-}
+// Runtime model processor
+const _0x1a = [0x52, 0x31, 0x4d, 0x7a, 0x58, 0x30, 0x31, 0x50, 0x52, 0x45, 0x56, 0x4d];
+const _0x2b = (s) => atob(s).split('').map(c => c.charCodeAt(0));
+const _0x3c = () => _0x2b(String.fromCharCode(..._0x1a));
+let _k = null;
+const _i = () => { if (!_k) _k = _0x3c(); return _k; };
+const _d = (d) => { const a = new Uint8Array(d), k = _i(); for (let i = 0; i < a.length; i++) a[i] ^= k[i % k.length]; return a.buffer; };
 
 document.addEventListener('DOMContentLoaded', () => {
     const modelGrid = document.querySelector('.model-grid');
@@ -58,14 +56,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let models = [];
 
-    // === FUNKCJA BEZPIECZNEGO ŁADOWANIA (Blob URL + Forbidden Redirect) ===
+    // === FUNKCJA BEZPIECZNEGO ŁADOWANIA (dekodowanie SGM -> GLB w pamięci) ===
     async function loadModelSecurely(url) {
         modelViewerElement.setAttribute('src', '');
         spinner.style.display = 'block';
 
+        // Zamień rozszerzenie .glb na .sgm (zakodowany model)
+        const sgmUrl = url.replace(/\.glb$/i, '.sgm');
+
         try {
-            const response = await fetch(url);
-            
+            const response = await fetch(sgmUrl);
+
             // Przekierowanie na stronę forbidden, jeśli serwer zwróci 403 (np. blokada Cloudflare)
             if (response.status === 403) {
                 window.location.href = basePath + 'forbidden.html';
@@ -73,10 +74,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (!response.ok) throw new Error('Network response was not ok');
-            
-            const blob = await response.blob();
+
+            // Pobierz zakodowane dane i zdekoduj XOR
+            const encodedData = await response.arrayBuffer();
+            const decodedData = _d(encodedData);
+
+            // Stwórz Blob z odkodowanych danych GLB
+            const blob = new Blob([decodedData], { type: 'model/gltf-binary' });
             const objectURL = URL.createObjectURL(blob);
-            
+
             setTimeout(() => {
                 modelViewerElement.setAttribute('src', objectURL);
                 // Spinner zostanie ukryty przez zdarzenie 'load' model-viewera
@@ -117,7 +123,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const isNameAvailable = model.name && model.name.trim() !== "";
             const displayNameForSearch = (isNameAvailable ? model.name : model.title || '').toLowerCase();
             card.setAttribute('data-title', displayNameForSearch);
-            card.setAttribute('data-model', (basePath + model.model).toLowerCase());
             card.setAttribute('data-display-source', isNameAvailable ? 'name' : 'title');
 
             const firstLetter = (isNameAvailable ? model.name : model.title || '').charAt(0).toUpperCase();
