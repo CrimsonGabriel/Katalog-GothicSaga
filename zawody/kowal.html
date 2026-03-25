@@ -1,67 +1,114 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kowal</title>
-  <link rel="stylesheet" href="../styles.css" />
-  <link rel="icon" href="../sg.ico" type="image/webp" />
+  <link rel="icon" href="../sg.ico" type="image/x-icon">
+  <link rel="stylesheet" href="../catalog.css">
 </head>
-<body>
-  <div class="background"></div>
-  <div class="logo-container">
-    <div class="logo-line">
-      <img src="../assets/img/logo.webp" alt="logo" class="logo-image" />
-      <span class="logo-text">Od Sagan studio</span>
-    </div>
-    <div class="logo-line">
-      <img src="../assets/img/msciciel.webp" alt="sigma" class="logo-image" />
-      <span class="logo-text">Podjebane od sigmy Msciciel </span>
-    </div>
-    <div class="logo-line">
-      <img src="../assets/img/gpt.webp" alt="syzyf" class="logo-image" />
-      <span class="logo-text">Robione przez Gepetto</span>
-    </div>
-    <div class="logo-line">
-      <img src="../assets/img/crimson.webp" alt="cwel" class="logo-image" />
-      <span class="logo-text">Podpisane przez cwela Crimson </span>
-    </div>
+<body data-page="kowal">
+  <div class="background1"></div>
+  <header>
+        <div class="category-buttons">
+            <button class="button" data-category="all">Wszystko</button>
+            <button class="button" data-category="Miecze">Miecze</button>
+            <button class="button" data-category="Rapiery">Rapiery</button>
+			<button class="button" data-category="Topory">Topory</button>
+			<button class="button" data-category="Obuchy">Obuchy</button>
+			<button class="button" data-category="Sztylety">Sztylety</button>
+			<button class="button" data-category="Włócznie">Włócznie</button>
+            <button class="button" data-category="Inne">Inne</button>
+        </div>
+       <div class="styled-wrapper">
+  <aside id="side-filters">
+    <div id="filter-toggle-tab">❯</div>
+
+  <div class="filters-wrapper">
+  <div class="filter-section">
+    <span class="filter-label">Tier:</span>
+    <button class="filter-button" data-tier="T0">N</button>
+    <button class="filter-button" data-tier="T1">I</button>
+    <button class="filter-button" data-tier="T2">II</button>
+    <button class="filter-button" data-tier="T3">III</button>
+    <button class="filter-button" data-tier="T4">IV</button>
+    <button class="filter-button" data-tier="T5">V</button>
   </div>
-  <div class="styled-wrapper">
-  <button class="buttonq" onclick="window.location.href='../index.html'">
-    <div class="buttonq-box">
-      <span class="buttonq-elem">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="arrow-icon">
-          <path fill="white" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
-        </svg>
-      </span>
-      <span class="buttonq-elem">
-        <svg fill="white" viewBox="0 0  24 24" xmlns="http://www.w3.org/2000/svg" class="arrow-icon">
-          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
-        </svg>
-      </span>
-    </div>
-  </button>
+  <div class="filter-section">
+    <span class="filter-label">Typ:</span>
+    <button class="filter-button" data-hands="1H">1H</button>
+    <button class="filter-button" data-hands="2H">2H</button>
+  </div>
+  <div class="filter-section">
+    <span class="filter-label">Stat:</span>
+    <button class="filter-button" data-stat="STR">STR</button>
+    <button class="filter-button" data-stat="DEX">DEX</button>
+    <button class="filter-button" data-stat="BOTH">BOTH</button>
+  </div>
+  <div class="filter-section">
+    <span class="filter-label">Obrażenia:</span>
+    <button class="filter-button" data-dmg="CUT">✂️</button>
+    <button class="filter-button" data-dmg="PRC">🗡️</button>
+    <button class="filter-button" data-dmg="BLT">🔨</button>
+  </div>
+
+  <input type="text" id="search-bar" placeholder="🔍 Szukaj...">
 </div>
+</aside>
 
-  <h1 class="main-title">Zawód: Kowal</h1>
+    <button class="buttonq" onclick="window.location.href='../index.html'">
+        <div class="buttonq-box">
+            <span class="buttonq-elem">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="arrow-icon">
+                    <path fill="white" d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
+                </svg>
+            </span>
+            <span class="buttonq-elem">
+                <svg fill="white" viewBox="0 0  24 24" xmlns="http://www.w3.org/2000/svg" class="arrow-icon">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
+                </svg>
+            </span>
+        </div>
+    </button>
 
-  <section class="main-grid">
-  
-	<a href="rafinacja_metali.html" class="main-card">
-      <img src="../assets/img/rafinacja_metali.webp" alt="Rafinacja Metali" />
-      <div class="card-overlay">Rafinacja Metali</div>
-	</a>
-	
-    <a href="zbrojmistrz.html" class="main-card">
-      <img src="../assets/img/zbrojmistrz.webp" alt="Zbrojmistrz" />
-      <div class="card-overlay">Zbrojmistrz</div>
-	</a>
 
-    <a href="platnerz.html" class="main-card">
-      <img src="../assets/img/platnerz.webp" alt="Płatnerz" />
-      <div class="card-overlay">Płatnerz</div>
-   </a>
-  </section>
+    <button class="buttonq" onclick="window.location.href='../zawody/kuziennik.html'">
+        <div class="buttonq-box">
+            <span class="buttonq-elem">
+               
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="arrow-icon" fill="white">
+                    <path d="M10 9V5l-7 7 7 7v-4h4c1.1 0 2 .9 2 2v3h2v-3c0-2.21-1.79-4-4-4h-4z"/>
+                </svg>
+            </span>
+            <span class="buttonq-elem">
+                
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="arrow-icon" fill="white">
+                     <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"></path>
+                </svg>
+            </span>
+        </div>
+    </button>
+</div>
+    </header>
+ <main>
+		<section class="search-feedback">
+			<div id="search-status" class="search-status"></div>
+			<div id="no-results" class="no-results">Brak wyników</div>
+		</section>
+        <section class="model-grid"></section>
+
+        <div id="model-viewer">
+            <button id="close-viewer">Zamknij</button>
+            <div id="model-info">
+                <h2 id="model-title"></h2>
+                <p id="model-description"></p>
+				<div id="model-details-container"></div>
+            </div>
+            <div id="spinner" class="spinner"></div> 
+            <model-viewer src="" alt="Model 3D" auto-rotate camera-controls></model-viewer>
+        </div>
+    </main>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
+    <script src="../catalog.js"></script>
 </body>
 </html>

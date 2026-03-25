@@ -3,15 +3,19 @@ const path = require('path');
 const { parse } = require('csv-parse');
 
 const csvFilePath = 'Itemki.csv';
-const jsonFilePath = './assets/dane/jubiler.json';
+const jsonFilePath = './assets/dane/tymczasowy.json'; 
 
+// ZAKTUALIZOWANE: Dodano 'Zdobywalne' i 'Dla Gracza' na końcu tablicy
 const CSV_HEADERS = [
-    'Nazwa', 'Opis', 'Main Flaga', 'Flaga', 'ItemCategory', 'ItemType', 'ItemGroupType',
-    'PLIK', 'Stackowanie', 'Instancja[OLD]', 'Instancja [SAGA3]', 'model nazwa', 'Waga', 'hideNick',
-    'Liczba użyć', 'Stamina 1 Hit', 'HP 1 hit', 'Mana 1 Hit', 'Stamina', 'HP', 'MANA',
-    'Rodzaj Obrażeń', 'DMG', 'Zasięg', 'W: Siła', 'W: Zręczność', 'W: Inteligencja',
-    'W: Krąg', 'W: Mana', 'Wytrzymałość', 'expirationTime', 'Obuchowa', 'Pociski', 'Sieczna',
-    'Magia', 'Ogień', 'Upadek', 'Tier', 'Profesja', 'Kategoria'
+    'Nazwa', 'KOSZT', 'Opis', 'Main Flaga', 'Flaga', 'ItemCategory', 'ItemType', 'ItemGroupType',
+    'PLIK', 'Stackowanie', 'Instancja[OLD]', 'visualInstance', 'Instancja [SAGA3]', 'Waga',
+    'Tier', 'adminRank', 'hideNick', 'Liczba użyć', 'Stamina 1 Hit', 'HP 1 hit', 'Mana 1 Hit',
+    'Stamina', 'HP', 'MANA', 'Rodzaj Obrażeń', 'DMG', 'Zasięg', 'W: Siła', 'W: Zręczność',
+    'W: Inteligencja', 'healing_tick', 'efekt czaru', 'Instancja przemiany', 'HP przemiany',
+    'W: Krąg', 'W: Mana', 'runeType', 'Przedmiot do naprawy', 'Wytrzymałość', 'canRob',
+    'Podatek Silden %', 'Podatek Geldern %', 'expirationTime', 'foodType', 'enduranceCost',
+    'arrowSpeed', 'Obuchowa', 'Pociski', 'Sieczna', 'Magia', 'Ogień', 'Upadek', 'Profesja',
+    'Kategoria', 'model nazwa', 'Craftowalne', 'Zdobywalne', 'Dla Gracza'
 ];
 
 function cleanValue(value) {
@@ -21,7 +25,6 @@ function cleanValue(value) {
     return value;
 }
 
-// Funkcja do usuwania rozszerzenia pliku, włącznie z .mms i .MMS
 function removeExtension(filename) {
     return filename.replace(/\.(3ds|asc|obj|fbx|gltf|mms|MMS|glb|GLB)$/i, '');
 }
@@ -34,17 +37,15 @@ async function processData() {
         return;
     }
 
-    if (!fs.existsSync(jsonFilePath)) {
-        console.error(`Błąd: Plik JSON nie znaleziono pod ścieżką: ${jsonFilePath}`);
-        return;
-    }
-
-    let jsonData;
-    try {
-        jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
-    } catch (error) {
-        console.error(`Błąd podczas odczytu lub parsowania pliku JSON:`, error);
-        return;
+    let jsonData = [];
+    if (fs.existsSync(jsonFilePath)) {
+        try {
+            jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
+        } catch (error) {
+            console.error(`Błąd podczas odczytu pliku JSON. Zaczynam od nowa.`, error);
+        }
+    } else {
+        console.log(`Plik ${jsonFilePath} nie istnieje - zostanie utworzony jako nowy.`);
     }
 
     const jsonMapByInstance = new Map();
@@ -90,48 +91,33 @@ async function processData() {
         }
 
         const itemData = {};
+        // ZAKTUALIZOWANE: Dodano 'Zdobywalne' i 'Dla Gracza' do obiektu mapującego
         const mappings = {
-            'Nazwa': 'name',
-            'Opis': 'opis',
-            'Main Flaga': 'mainFlag',
-            'Instancja[OLD]': 'instance',
-            'Instancja [SAGA3]': 'instancesaga3',
-            'ItemCategory': 'category',
-            'Waga': 'weight',
-            'Wytrzymałość': 'durability',
-            'Liczba użyć': 'uses',
-            'Stamina 1 Hit': 'staminaPerHit',
-            'HP 1 hit': 'hpPerHit',
-            'Mana 1 Hit': 'manaPerHit',
-            'Stamina': 'stamina',
-            'HP': 'hp',
-            'MANA': 'mana',
-            'Rodzaj Obrażeń': 'dmgType',
-            'DMG': 'dmg',
-            'Zasięg': 'range',
-            'W: Siła': 'strength',
-            'W: Zręczność': 'dexterity',
-            'W: Inteligencja': 'intelligence',
-            'W: Krąg': 'magicCircle',
-            'W: Mana': 'manaCost',
-            'Obuchowa': 'resistance_blunt',
-            'Pociski': 'resistance_projectile',
-            'Sieczna': 'resistance_slash',
-            'Magia': 'resistance_magic',
-            'Ogień': 'resistance_fire',
-            'Upadek': 'resistance_fall',
-            'model nazwa': 'modelNazwa',
-            'Tier': 'tier',
-            'expirationTime': 'expirationTime',
-            'PLIK': 'plik',
-            'Profesja': 'profession',
-            'Kategoria': 'kategoria'
+            'Nazwa': 'name', 'KOSZT': 'cost', 'Opis': 'opis', 'Main Flaga': 'mainFlag',
+            'Flaga': 'flaga', 'ItemCategory': 'category', 'ItemType': 'itemType',
+            'ItemGroupType': 'itemGroupType', 'PLIK': 'plik', 'Stackowanie': 'stackable',
+            'Instancja[OLD]': 'instance', 'visualInstance': 'visualInstance',
+            'Instancja [SAGA3]': 'instancesaga3', 'Waga': 'weight', 'Tier': 'tier',
+            'adminRank': 'adminRank', 'hideNick': 'hideNick', 'Liczba użyć': 'uses',
+            'Stamina 1 Hit': 'staminaPerHit', 'HP 1 hit': 'hpPerHit', 'Mana 1 Hit': 'manaPerHit',
+            'Stamina': 'stamina', 'HP': 'hp', 'MANA': 'mana', 'Rodzaj Obrażeń': 'dmgType',
+            'DMG': 'dmg', 'Zasięg': 'range', 'W: Siła': 'strength', 'W: Zręczność': 'dexterity',
+            'W: Inteligencja': 'intelligence', 'healing_tick': 'healingTick', 'efekt czaru': 'spellEffect',
+            'Instancja przemiany': 'transformationInstance', 'HP przemiany': 'transformationHp',
+            'W: Krąg': 'magicCircle', 'W: Mana': 'manaCost', 'runeType': 'runeType',
+            'Przedmiot do naprawy': 'repairItem', 'Wytrzymałość': 'durability', 'canRob': 'canRob',
+            'Podatek Silden %': 'taxSilden', 'Podatek Geldern %': 'taxGeldern', 'expirationTime': 'expirationTime',
+            'foodType': 'foodType', 'enduranceCost': 'enduranceCost', 'arrowSpeed': 'arrowSpeed',
+            'Obuchowa': 'resistance_blunt', 'Pociski': 'resistance_projectile', 'Sieczna': 'resistance_slash',
+            'Magia': 'resistance_magic', 'Ogień': 'resistance_fire', 'Upadek': 'resistance_fall',
+            'Profesja': 'profession', 'Kategoria': 'kategoria', 'model nazwa': 'modelNazwa', 
+            'Craftowalne': 'craftable', 'Zdobywalne': 'obtainable', 'Dla Gracza': 'forPlayer'
         };
         
         for (const csvKey in mappings) {
             const jsonKey = mappings[csvKey];
             const value = cleanValue(row[csvKey]);
-            if (value !== undefined) {
+            if (value !== undefined && value !== '') {
                 itemData[jsonKey] = value;
             }
         }
@@ -172,6 +158,9 @@ async function processData() {
     });
 
     try {
+        const dir = path.dirname(jsonFilePath);
+        if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+        
         fs.writeFileSync(jsonFilePath, JSON.stringify(jsonData, null, 4), 'utf8');
         console.log(`\nProces zakończony pomyślnie.`);
         console.log(`Zaktualizowano ${updatedCount} istniejących wpisów.`);

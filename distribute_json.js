@@ -1,11 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const jsonFilePath = './assets/dane/jubiler.json';
+const jsonFilePath = './assets/dane/tymczasowy.json';
 const outputDir = './assets/dane/';
 
-// Mapowanie profesji na nazwy plików JSON
 const professionToFileMap = {
+    'Jubiler': 'jubiler.json',
     'Alchemik': 'alchemik.json',
     'Drwal': 'drwal.json',
     'Górnik': 'gornik.json',
@@ -16,19 +16,19 @@ const professionToFileMap = {
     'Łuczarz': 'luczarz.json',
     'Myśliwy': 'mysliwy.json',
     'Płatnerz': 'platnerz.json',
-    'Kowal': 'rafinacja_metali.json',
     'Rolnik': 'rolnik.json',
     'Krawiec': 'ubrania.json',
     'Zaklinacz': 'zaklinacz.json',
     'Zbieracz': 'zbieracz.json',
-    'Zbrojmistrz': 'zbrojmistrz.json'
+    'Kowal': 'kowal.json'
 };
 
 async function distributeData() {
-    console.log("--- Rozpoczynam dystrybucję danych na podstawie profesji ---");
+    console.log("--- Rozpoczynam dystrybucję danych do plików profesji ---");
 
     if (!fs.existsSync(jsonFilePath)) {
-        console.error(`Błąd: Plik źródłowy JSON nie znaleziono pod ścieżką: ${jsonFilePath}`);
+        console.error(`Błąd: Plik źródłowy (tymczasowy) JSON nie został znaleziony pod ścieżką: ${jsonFilePath}`);
+        console.log(`Najpierw uruchom skrypt aktualizujący dane z CSV!`);
         return;
     }
 
@@ -36,8 +36,23 @@ async function distributeData() {
     try {
         jsonData = JSON.parse(fs.readFileSync(jsonFilePath, 'utf8'));
     } catch (error) {
-        console.error(`Błąd podczas odczytu lub parsowania pliku JSON:`, error);
+        console.error(`Błąd podczas odczytu pliku tymczasowego:`, error);
         return;
+    }
+
+    if (!fs.existsSync(outputDir)) {
+        console.log(`Katalog docelowy ${outputDir} nie istnieje. Tworzę...`);
+        fs.mkdirSync(outputDir, { recursive: true });
+    }
+
+    console.log("Czyszczenie istniejących plików JSON...");
+    for (const key in professionToFileMap) {
+        const filePath = path.join(outputDir, professionToFileMap[key]);
+        try {
+            fs.writeFileSync(filePath, '[]', 'utf8');
+        } catch (error) {
+            console.error(`Nie udało się wyczyścić pliku ${filePath}:`, error);
+        }
     }
 
     const distributedData = {};
@@ -49,7 +64,9 @@ async function distributeData() {
     let unassignedRecordsCount = 0;
 
     jsonData.forEach(item => {
-        const profession = item.profession;
+        // Dodano .trim(), by upewnić się, że białe znaki nie zepsują dopasowania z Excela
+        const profession = item.profession ? item.profession.trim() : null;
+        
         if (profession && professionToFileMap[profession]) {
             distributedData[profession].push(item);
             processedRecordsCount++;
@@ -58,13 +75,6 @@ async function distributeData() {
         }
     });
 
-    // Sprawdzanie, czy katalog docelowy istnieje, i tworzenie go, jeśli nie
-    if (!fs.existsSync(outputDir)) {
-        console.log(`Katalog docelowy ${outputDir} nie istnieje. Tworzę...`);
-        fs.mkdirSync(outputDir, { recursive: true });
-    }
-
-    // Zapisywanie danych do poszczególnych plików JSON
     for (const profession in distributedData) {
         const records = distributedData[profession];
         if (records.length > 0) {
@@ -83,6 +93,16 @@ async function distributeData() {
     console.log(`Przetworzono łącznie ${processedRecordsCount} rekordów.`);
     if (unassignedRecordsCount > 0) {
         console.log(`Pominięto ${unassignedRecordsCount} rekordów bez przypisanej profesji lub z nieznaną profesją.`);
+    }
+
+    // Usuwanie pliku tymczasowego po zakończeniu
+    try {
+        if (fs.existsSync(jsonFilePath)) {
+            fs.unlinkSync(jsonFilePath);
+            console.log(`\nPlik tymczasowy (${jsonFilePath}) został pomyślnie posprzątany.`);
+        }
+    } catch (error) {
+        console.error(`\nNie udało się usunąć pliku tymczasowego:`, error);
     }
 }
 

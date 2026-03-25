@@ -14,42 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const spinner = document.getElementById('spinner');
     const categoryButtons = document.querySelectorAll('.button');
 
-    // Elementy do wyświetlania w podglądzie detali
-    const detailsContainer = document.getElementById('model-info');
-    const createDetail = (id, cls) => {
-        const p = document.createElement('p');
-        p.id = id;
-        p.className = cls;
-        detailsContainer.appendChild(p);
-        return p;
-    };
-
-    const modelOpis = createDetail('model-opis', 'model-detail-opis');
-    const modelWeight = createDetail('model-weight', 'model-detail-weight');
-    const modelRange = createDetail('model-range', 'model-detail-range');
-    const modelMagicCircle = createDetail('model-magic_circle', 'model-detail-magic_circle');
-    const modelManaCost = createDetail('model-mana_cost', 'model-detail-mana_cost');
-    const modelDurability = createDetail('model-durability', 'model-detail-durability');
-    const modelHands = createDetail('model-hands', 'model-detail-hands');
-    const modelUses = createDetail('model-uses', 'model-detail-uses');
-    const modelStaminaPerHit = createDetail('model-staminaPerHit', 'model-detail-staminaPerHit');
-    const modelHpPerHit = createDetail('model-hpPerHit', 'model-detail-hpPerHit');
-    const modelManaPerHit = createDetail('model-manaPerHit', 'model-detail-manaPerHit');
-    const modelStamina = createDetail('model-stamina', 'model-detail-stamina');
-    const modelHp = createDetail('model-hp', 'model-detail-hp');
-    const modelMana = createDetail('model-mana', 'model-detail-mana');
-    const modelDmgType = createDetail('model-dmgType', 'model-detail-dmgType');
-    const modelDmg = createDetail('model-dmg', 'model-detail-dmg');
-    const modelStrength = createDetail('model-strength', 'model-detail-strength');
-    const modelDexterity = createDetail('model-dexterity', 'model-detail-dexterity');
-    const modelIntelligence = createDetail('model-intelligence', 'model-detail-intelligence');
-    const modelResistanceBlunt = createDetail('model-resistance_blunt', 'model-detail-resistance_blunt');
-    const modelResistanceProjectile = createDetail('model-resistance_projectile', 'model-detail-resistance_projectile');
-    const modelResistanceSlash = createDetail('model-resistance_slash', 'model-detail-resistance_slash');
-    const modelResistanceMagic = createDetail('model-resistance_magic', 'model-detail-resistance_magic');
-    const modelResistanceFire = createDetail('model-resistance_fire', 'model-detail-resistance_fire');
-    const modelResistanceFall = createDetail('model-resistance_fall', 'model-detail-resistance_fall');
-    
     const pageName = document.body.getAttribute('data-page');
     const jsonUrl = `../assets/dane/${pageName}.json`;
     const basePath = window.location.pathname.includes('/zawody/') ? '../' : '';
@@ -61,13 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
         modelViewerElement.setAttribute('src', '');
         spinner.style.display = 'block';
 
-        // Zamień rozszerzenie .glb na .sgm (zakodowany model)
         const sgmUrl = url.replace(/\.glb$/i, '.sgm');
 
         try {
             const response = await fetch(sgmUrl);
 
-            // Przekierowanie na stronę forbidden, jeśli serwer zwróci 403 (np. blokada Cloudflare)
             if (response.status === 403) {
                 window.location.href = basePath + 'forbidden.html';
                 return;
@@ -75,17 +37,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok) throw new Error('Network response was not ok');
 
-            // Pobierz zakodowane dane i zdekoduj XOR
             const encodedData = await response.arrayBuffer();
             const decodedData = _d(encodedData);
 
-            // Stwórz Blob z odkodowanych danych GLB
             const blob = new Blob([decodedData], { type: 'model/gltf-binary' });
             const objectURL = URL.createObjectURL(blob);
 
             setTimeout(() => {
                 modelViewerElement.setAttribute('src', objectURL);
-                // Spinner zostanie ukryty przez zdarzenie 'load' model-viewera
             }, 50);
 
         } catch (error) {
@@ -101,16 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
             displayModels(models);
         } catch (error) {
             console.error('Błąd podczas pobierania danych:', error);
-        }
-    }
-
-    function setDetailText(element, label, value) {
-        if (value !== null && value !== undefined && value !== 'BRAK' && value !== '' && value !== '0' && value !== '?') {
-            element.textContent = `${label}: ${value}`;
-            element.style.display = 'block';
-        } else {
-            element.textContent = '';
-            element.style.display = 'none';
         }
     }
 
@@ -157,21 +106,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (dType) card.setAttribute("data-dmg", dType);
             }
 
-            if (model.tier) card.setAttribute("data-tier", model.tier);
+            // --- INTELIGENTNE WYCIĄGANIE NUMERU TIERU ---
+            // Upewniamy się, że do filtra dataset trafi zawsze jednolity format, np. "1", "2", "3"
+            let tierNum = "";
+            let rawTier = model.tier;
+            if (rawTier !== undefined && rawTier !== null && String(rawTier).trim() !== '' && String(rawTier).toUpperCase() !== 'BRAK') {
+                tierNum = String(rawTier).trim().replace(/^T/i, ''); // Usuwa 'T' lub 't' z przodu, jeśli jest
+            }
+
+            if (tierNum) {
+                // Do filtru zapisujemy np "T1" - założyłem że twoje guziki mają wpisane "T1" w data-tier
+                card.setAttribute("data-tier", "T" + tierNum); 
+            }
             if (model.hands) card.setAttribute("data-hands", model.hands);
 
             const img = document.createElement('img');
-            img.src = basePath + model.thumbnail;
+            img.src = basePath + (model.thumbnail.startsWith('TODO:') ? 'assets/card/default.webp' : model.thumbnail);
             img.alt = isNameAvailable ? model.name : model.title;
             img.loading = "lazy";
+            img.onerror = function() { this.onerror=null; this.src = basePath + 'assets/card/default.webp'; };
 
             const title = document.createElement('h2');
             title.textContent = isNameAvailable ? model.name : model.title;
             
-            if (model.tier && model.tier !== 'BRAK') {
+            // --- WYŚWIETLANIE TAGU TIERU NA KARTACH ---
+            if (tierNum) {
                 const tierTag = document.createElement('div');
-                tierTag.classList.add('tier-tag', `tier-${model.tier.toLowerCase()}`);
-                tierTag.textContent = model.tier;
+                tierTag.classList.add('tier-tag', `tier-t${tierNum}`);
+                tierTag.textContent = `T${tierNum}`;
                 card.appendChild(tierTag);
             }
 
@@ -195,37 +157,145 @@ document.addEventListener('DOMContentLoaded', () => {
 
             card.addEventListener('click', () => {
                 document.getElementById('model-title').textContent = isNameAvailable ? model.name : model.title;
-                document.getElementById('model-description').textContent = model.description;
+                const descEl = document.getElementById('model-description');
+                if (descEl) descEl.textContent = model.description || '';
 
-                setDetailText(modelOpis, 'Opis Przedmiotu', model.opis);
-                setDetailText(modelWeight, 'Waga', model.weight);
-                setDetailText(modelRange, 'Zasięg', model.range);
-                setDetailText(modelMagicCircle, 'Magiczny Krąg', model.magicCircle);
-                setDetailText(modelManaCost, 'Koszt Many', model.manaCost);
-                setDetailText(modelDurability, 'Wytrzymałość', model.durability);
-                setDetailText(modelHands, 'Uchwyt', model.hands === "1H" ? "Jednoręczna" : (model.hands === "2H" ? "Dwuręczna" : ""));
-                setDetailText(modelUses, 'Liczba użyć', model.uses);
-                setDetailText(modelStaminaPerHit, 'Stamina za 1 hit', model.staminaPerHit);
-                setDetailText(modelHpPerHit, 'HP za 1 hit', model.hpPerHit);
-                setDetailText(modelManaPerHit, 'Mana za 1 hit', model.manaPerHit);
-                setDetailText(modelStamina, 'Stamina', model.stamina);
-                setDetailText(modelHp, 'HP', model.hp);
-                setDetailText(modelMana, 'Mana', model.mana);
-                setDetailText(modelDmgType, 'Rodzaj obrażeń', model.dmgType);
-                setDetailText(modelDmg, 'DMG', model.dmg);
-                setDetailText(modelStrength, 'Wymagana Siła', model.strength);
-                setDetailText(modelDexterity, 'Wymagana Zręczność', model.dexterity);
-                setDetailText(modelIntelligence, 'Wymagana Inteligencja', model.intelligence);
-                setDetailText(modelResistanceBlunt, 'Obrona Obuchowa', model.resistance_blunt);
-                setDetailText(modelResistanceProjectile, 'Obrona Pociski', model.resistance_projectile);
-                setDetailText(modelResistanceSlash, 'Obrona Sieczna', model.resistance_slash);
-                setDetailText(modelResistanceMagic, 'Obrona Magia', model.resistance_magic);
-                setDetailText(modelResistanceFire, 'Obrona Ogień', model.resistance_fire);
-                setDetailText(modelResistanceFall, 'Obrona Upadek', model.resistance_fall);
-                
+                const detailsContainer = document.getElementById('model-details-container');
+                if (!detailsContainer) {
+                    console.error('Błąd: Nie znaleziono elementu <div id="model-details-container"></div> w HTML!');
+                    return;
+                }
+                detailsContainer.innerHTML = ''; 
+
+                const detailGroups = [
+                    {
+                        title: "Informacje Podstawowe",
+                        items: [
+                            { label: 'Opis', val: model.opis },
+                            { label: 'Koszt', val: model.cost },
+                            { label: 'Waga', val: model.weight },
+                            { label: 'Tier', val: tierNum ? `T${tierNum}` : null },
+                            { label: 'Profesja', val: model.profession },
+                            { label: 'Kategoria', val: model.kategoria || model.category },
+                            { label: 'Craftowalne', val: model.craftable },
+                            { label: 'Zdobywalne', val: model.obtainable },
+                            { label: 'Dla Gracza', val: model.forPlayer },
+                            { label: 'Wytrzymałość', val: model.durability },
+                            { label: 'Narzędzie do naprawy', val: model.repairItem },
+                            { label: 'Liczba użyć', val: model.uses }
+                        ]
+                    },
+                    {
+                        title: "Walka i Obrażenia",
+                        items: [
+                            { label: 'Uchwyt', val: model.hands === "1H" ? "Jednoręczna" : (model.hands === "2H" ? "Dwuręczna" : "") },
+                            { label: 'Rodzaj obrażeń', val: model.dmgType },
+                            { label: 'DMG', val: model.dmg },
+                            { label: 'Zasięg', val: model.range },
+                            { label: 'Szybkość strzały', val: model.arrowSpeed }
+                        ]
+                    },
+                    {
+                        title: "Wymagania",
+                        items: [
+                            { label: 'Siła', val: model.strength },
+                            { label: 'Zręczność', val: model.dexterity },
+                            { label: 'Inteligencja', val: model.intelligence }
+                        ]
+                    },
+                    {
+                        title: "Magia i Efekty",
+                        items: [
+                            { label: 'Magiczny Krąg', val: model.magicCircle },
+                            { label: 'Koszt Many', val: model.manaCost },
+                            { label: 'Typ Runy', val: model.runeType },
+                            { label: 'Efekt Czaru', val: model.spellEffect },
+                            { label: 'Instancja Przemiany', val: model.transformationInstance },
+                            { label: 'HP Przemiany', val: model.transformationHp },
+                            { label: 'Leczenie (Tick)', val: model.healingTick }
+                        ]
+                    },
+                    {
+                        title: "Koszty / Zyski za uderzenie",
+                        items: [
+                            { label: 'Stamina (1 hit)', val: model.staminaPerHit },
+                            { label: 'HP (1 hit)', val: model.hpPerHit },
+                            { label: 'Mana (1 hit)', val: model.manaPerHit },
+                            { label: 'Koszt Wytrzymałości', val: model.enduranceCost }
+                        ]
+                    },
+                    {
+                        title: "Konsumpcja / Bonusy",
+                        items: [
+                            { label: 'Typ Jedzenia', val: model.foodType },
+                            { label: 'Stamina (Bonus)', val: model.stamina },
+                            { label: 'HP (Bonus)', val: model.hp },
+                            { label: 'Mana (Bonus)', val: model.mana }
+                        ]
+                    },
+                    {
+                        title: "Ochrona i Pancerz",
+                        items: [
+                            { label: 'Obrona Obuchowa', val: model.resistance_blunt },
+                            { label: 'Obrona Pociski', val: model.resistance_projectile },
+                            { label: 'Obrona Sieczna', val: model.resistance_slash },
+                            { label: 'Obrona Magia', val: model.resistance_magic },
+                            { label: 'Obrona Ogień', val: model.resistance_fire },
+                            { label: 'Obrona Upadek', val: model.resistance_fall }
+                        ]
+                    },
+                    {
+                        title: "Dane Systemowe",
+                        items: [
+                            { label: 'Można okraść', val: model.canRob },
+                            { label: 'Podatek Silden (%)', val: model.taxSilden },
+                            { label: 'Podatek Geldern (%)', val: model.taxGeldern },
+                            { label: 'Main Flaga', val: model.mainFlag },
+                            { label: 'Flaga', val: model.flaga },
+                            { label: 'Item Type', val: model.itemType },
+                            { label: 'Item Group Type', val: model.itemGroupType },
+                            { label: 'Stackowalne', val: model.stackable },
+                            { label: 'Ukrywa Nick', val: model.hideNick },
+                            { label: 'Czas Wygaśnięcia', val: model.expirationTime },
+                            { label: 'Ranga Admina', val: model.adminRank },
+                            { label: 'Instancja [OLD]', val: model.instance },
+                            { label: 'Instancja [SAGA3]', val: model.instancesaga3 },
+                            { label: 'Visual Instance', val: model.visualInstance }
+                        ]
+                    }
+                ];
+
+                detailGroups.forEach(group => {
+                    const validItems = group.items.filter(item => {
+                        const val = item.val;
+                        if (val === undefined || val === null || val === '') return false;
+                        const strVal = String(val).trim().toUpperCase();
+                        if (strVal === '0' || strVal === '-' || strVal === 'BRAK') return false;
+                        return true;
+                    });
+
+                    if (validItems.length > 0) {
+                        const header = document.createElement('h4');
+                        header.style.marginTop = '15px';
+                        header.style.marginBottom = '5px';
+                        header.style.paddingBottom = '3px';
+                        header.style.borderBottom = '1px solid rgba(255, 255, 255, 0.2)';
+                        header.style.color = '#ccc';
+                        header.textContent = group.title;
+                        detailsContainer.appendChild(header);
+
+                        validItems.forEach(item => {
+                            const row = document.createElement('div');
+                            row.style.marginBottom = '4px';
+                            row.style.fontSize = '0.95em';
+                            row.innerHTML = `<strong style="color: #fff;">${item.label}:</strong> <span style="color: #ddd;">${item.val}</span>`;
+                            detailsContainer.appendChild(row);
+                        });
+                    }
+                });
+
                 modelViewer.style.display = 'flex';
                 document.body.classList.add('viewer-open');
-
                 loadModelSecurely(basePath + model.model);
             });
         });
@@ -264,14 +334,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function applyAllFilters() {
-        const query = document.getElementById('search-bar').value.toLowerCase().trim();
+        const query = document.getElementById('search-bar') ? document.getElementById('search-bar').value.toLowerCase().trim() : '';
         const cards = document.querySelectorAll('.main-card');
         let visible = 0;
 
         cards.forEach(card => {
             const title = card.dataset.title || "";
             const matchSearch = title.includes(query) || (card.dataset.instance || "").toLowerCase().includes(query);
-            const matchTier = !activeTier || card.dataset.tier === activeTier;
+            
+            // Logika sprawdzania tieru
+            let matchTier = true;
+            if (activeTier) {
+                // Konwersja by upewnic się, że np 'T1' dopasuje się do 'T1'
+                const filterVal = String(activeTier).toUpperCase().trim();
+                const cardVal = String(card.dataset.tier || "").toUpperCase().trim();
+                matchTier = (cardVal === filterVal);
+            }
+
             const matchHands = !activeHands || card.dataset.hands === activeHands;
             const matchStat = !activeStat || card.dataset.stat === activeStat;
             const matchDmg = !activeDmg || card.dataset.dmg === activeDmg;
@@ -282,7 +361,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (match) visible++;
         });
 
-        document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+        const noResults = document.getElementById('no-results');
+        if(noResults) noResults.style.display = visible === 0 ? 'block' : 'none';
+        
         const status = document.getElementById('search-status');
         if (status) status.textContent = query ? `Znaleziono: ${visible} / ${cards.length}` : '';
     }
@@ -301,7 +382,8 @@ document.addEventListener('DOMContentLoaded', () => {
         modelViewer.style.display = 'none';
         document.body.classList.remove('viewer-open');
         modelViewerElement.setAttribute('src', '');
-        document.querySelectorAll('#model-info p').forEach(p => { p.textContent = ''; p.style.display = 'none'; });
+        const detailsContainer = document.getElementById('model-details-container');
+        if(detailsContainer) detailsContainer.innerHTML = '';
     });
 
     window.addEventListener('scroll', () => {
