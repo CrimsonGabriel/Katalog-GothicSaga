@@ -5,7 +5,6 @@ const { parse } = require('csv-parse');
 const csvFilePath = 'Itemki.csv';
 const jsonFilePath = './assets/dane/tymczasowy.json'; 
 
-// ZAKTUALIZOWANE: Dodano 'Zdobywalne' i 'Dla Gracza' na końcu tablicy
 const CSV_HEADERS = [
     'Nazwa', 'KOSZT', 'Opis', 'Main Flaga', 'Flaga', 'ItemCategory', 'ItemType', 'ItemGroupType',
     'PLIK', 'Stackowanie', 'Instancja[OLD]', 'visualInstance', 'Instancja [SAGA3]', 'Waga',
@@ -15,7 +14,7 @@ const CSV_HEADERS = [
     'W: Krąg', 'W: Mana', 'runeType', 'Przedmiot do naprawy', 'Wytrzymałość', 'canRob',
     'Podatek Silden %', 'Podatek Geldern %', 'expirationTime', 'foodType', 'enduranceCost',
     'arrowSpeed', 'Obuchowa', 'Pociski', 'Sieczna', 'Magia', 'Ogień', 'Upadek', 'Profesja',
-    'Kategoria', 'model nazwa', 'Craftowalne', 'Zdobywalne', 'Dla Gracza'
+    'Kategoria', 'model nazwa', 'Craftowalne', 'Zdobywalne', 'Dla Gracza', 'Do katalogu?'
 ];
 
 function cleanValue(value) {
@@ -78,8 +77,19 @@ async function processData() {
 
     let updatedCount = 0;
     let addedCount = 0;
+    let skippedCount = 0;
 
     for (const row of csvData) {
+        // POBIERANIE WARTOŚCI "Do katalogu?"
+        const doKatalogu = String(cleanValue(row['Do katalogu?'])).toUpperCase();
+        
+        // --- POPRAWIONA LOGIKA FILTROWANIA ---
+        // Akceptujemy TRUE, PRAWDA oraz 1
+        if (doKatalogu !== 'TRUE' && doKatalogu !== 'PRAWDA' && doKatalogu !== '1') {
+            skippedCount++;
+            continue; // Przeskakujemy przedmiot, jeśli wartość jest inna (np. FALSE)
+        }
+
         const instanceOld = cleanValue(row['Instancja[OLD]'])?.toUpperCase();
         const instanceSaga3 = cleanValue(row['Instancja [SAGA3]'])?.toUpperCase();
         
@@ -91,7 +101,6 @@ async function processData() {
         }
 
         const itemData = {};
-        // ZAKTUALIZOWANE: Dodano 'Zdobywalne' i 'Dla Gracza' do obiektu mapującego
         const mappings = {
             'Nazwa': 'name', 'KOSZT': 'cost', 'Opis': 'opis', 'Main Flaga': 'mainFlag',
             'Flaga': 'flaga', 'ItemCategory': 'category', 'ItemType': 'itemType',
@@ -163,6 +172,7 @@ async function processData() {
         
         fs.writeFileSync(jsonFilePath, JSON.stringify(jsonData, null, 4), 'utf8');
         console.log(`\nProces zakończony pomyślnie.`);
+        console.log(`Pominięto (odrzucono) ${skippedCount} wpisów, ponieważ "Do katalogu?" != TRUE/PRAWDA.`);
         console.log(`Zaktualizowano ${updatedCount} istniejących wpisów.`);
         console.log(`Dodano ${addedCount} nowych wpisów.`);
         console.log(`${notInCsvCount} wpisów zostało oznaczonych jako 'TODO: "Nie ma w excel"'.`);

@@ -5,7 +5,6 @@ const jsonFilePath = './assets/dane/tymczasowy.json';
 const outputDir = './assets/dane/';
 
 const professionToFileMap = {
-    'Jubiler': 'jubiler.json',
     'Alchemik': 'alchemik.json',
     'Drwal': 'drwal.json',
     'Górnik': 'gornik.json',

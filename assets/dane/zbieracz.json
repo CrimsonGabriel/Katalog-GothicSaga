@@ -1403,7 +1403,7 @@
         "thumbnail": "assets/card/SDRP_FISH_04.webp"
     },
     {
-        "title": "TODO: \"BRAK MODELU\"",
+        "title": "ITMI_SHELL_01",
         "name": "Małż",
         "opis": "Cenny skarb wyłowiony z morza.",
         "mainFlag": "ITEM_CAT_NONE",
@@ -1456,10 +1456,11 @@
         "resistance_fall": "BRAK",
         "profession": "Zbieracz",
         "kategoria": "Owoce morza",
+        "modelNazwa": "ItMi_Shell_01.3ds",
         "obtainable": "TAK",
         "forPlayer": "TAK",
-        "model": "TODO: \"Brak modelu\"",
-        "thumbnail": "TODO: \"Brak miniaturki\""
+        "model": "assets/models/ITMI_SHELL_01.glb",
+        "thumbnail": "assets/card/ITMI_SHELL_01.webp"
     },
     {
         "title": "ITMI_WHITEPEARL_01",
@@ -1584,7 +1585,7 @@
         "thumbnail": "assets/card/ITAT_MEATBUGFLESH.webp"
     },
     {
-        "title": "TODO: \"BRAK MODELU\"",
+        "title": "ITMI_SHELL_01",
         "name": "Błyszczący małż",
         "opis": "Prawdziwy skarb wyłowiony z morza.",
         "mainFlag": "ITEM_CAT_NONE",
@@ -1637,10 +1638,11 @@
         "resistance_fall": "BRAK",
         "profession": "Zbieracz",
         "kategoria": "Owoce morza",
+        "modelNazwa": "ItMi_Shell_01.3ds",
         "obtainable": "TAK",
         "forPlayer": "TAK",
-        "model": "TODO: \"Brak modelu\"",
-        "thumbnail": "TODO: \"Brak miniaturki\""
+        "model": "assets/models/ITMI_SHELL_01.glb",
+        "thumbnail": "assets/card/ITMI_SHELL_01.webp"
     },
     {
         "title": "ITMI_DARKPEARL",

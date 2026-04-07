@@ -15,8 +15,8 @@ const fs = require('fs');
 const path = require('path');
 
 const XOR_KEY = [0x47, 0x53, 0x33, 0x5F, 0x4D, 0x4F, 0x44, 0x45, 0x4C];
-const SOURCES_DIR = path.join(__dirname, 'assets', 'models', 'sources');
 const OUTPUT_DIR = path.join(__dirname, 'assets', 'models');
+const SOURCES_DIR = path.join(OUTPUT_DIR, 'sources');
 const OUTPUT_EXT = '.sgm';
 
 function xorEncode(buffer) {
@@ -27,50 +27,94 @@ function xorEncode(buffer) {
     return result;
 }
 
-function convertFile(file) {
-    const inputPath = path.join(SOURCES_DIR, file);
-    const outputName = file.replace(/\.glb$/i, OUTPUT_EXT);
-    const outputPath = path.join(OUTPUT_DIR, outputName);
+// 1. FUNKCJA SPRZĄTAJĄCA: Przenosi oryginalne .glb do folderu sources
+function organizeFiles() {
+    console.log('--- KROK 1: Porządkowanie plików ---');
+    
+    if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+    if (!fs.existsSync(SOURCES_DIR)) fs.mkdirSync(SOURCES_DIR, { recursive: true });
 
-    if (!fs.existsSync(inputPath)) {
-        console.log(`[ERR]  Nie znaleziono: sources/${file}`);
-        return false;
-    }
+    const items = fs.readdirSync(OUTPUT_DIR);
+    let movedCount = 0;
 
-    // Sprawdź czy plik wymaga konwersji (źródło nowsze niż output)
-    if (fs.existsSync(outputPath)) {
-        const srcStat = fs.statSync(inputPath);
-        const outStat = fs.statSync(outputPath);
-        if (outStat.mtime >= srcStat.mtime) {
-            return 'skip';
+    items.forEach(item => {
+        const itemPath = path.join(OUTPUT_DIR, item);
+        
+        // Ignorujemy foldery (aby nie ruszać folderu 'sources')
+        if (fs.statSync(itemPath).isDirectory()) return;
+
+        // Łapiemy pliki .glb porzucone w głównym folderze i przenosimy do sources
+        if (item.toLowerCase().endsWith('.glb')) {
+            const destPath = path.join(SOURCES_DIR, item);
+            
+            // Przenosimy plik
+            fs.renameSync(itemPath, destPath);
+            console.log(`[PRZENIESIONO] ${item} -> sources/`);
+            movedCount++;
         }
-    }
+    });
 
+    if (movedCount > 0) {
+        console.log(`Sukces: Przeniesiono ${movedCount} surowych plików do ukrytego folderu sources.\\n`);
+    } else {
+        console.log('Brak nowych plików w głównym folderze. Wszystko posprzątane.\\n');
+    }
+}
+
+// Funkcja do szukania plików .glb (działa też w podfolderach)
+function getAllGlbFiles(dirPath, arrayOfFiles) {
+    if (!fs.existsSync(dirPath)) return arrayOfFiles || [];
+    
+    const files = fs.readdirSync(dirPath);
+    arrayOfFiles = arrayOfFiles || [];
+
+    files.forEach(function(file) {
+        const fullPath = path.join(dirPath, file);
+        if (fs.statSync(fullPath).isDirectory()) {
+            arrayOfFiles = getAllGlbFiles(fullPath, arrayOfFiles);
+        } else {
+            if (file.toLowerCase().endsWith('.glb')) {
+                arrayOfFiles.push(fullPath);
+            }
+        }
+    });
+    return arrayOfFiles;
+}
+
+// 2. FUNKCJA KONWERTUJĄCA: Szyfruje .glb i zapisuje jako .sgm
+function convertFile(inputPath) {
     try {
-        const inputBuffer = fs.readFileSync(inputPath);
-        const encodedBuffer = xorEncode(inputBuffer);
-        fs.writeFileSync(outputPath, encodedBuffer);
-        console.log(`[OK]   sources/${file} -> ${outputName} (${(inputBuffer.length / 1024).toFixed(1)} KB)`);
+        const fileName = path.basename(inputPath, path.extname(inputPath));
+        const outputPath = path.join(OUTPUT_DIR, fileName + OUTPUT_EXT);
+
+        // Jeśli plik już istnieje i jest nowszy/taki sam, pomiń konwersję (oszczędność czasu)
+        if (fs.existsSync(outputPath)) {
+            const inStat = fs.statSync(inputPath);
+            const outStat = fs.statSync(outputPath);
+            if (outStat.mtime >= inStat.mtime) {
+                return 'skip';
+            }
+        }
+
+        const buffer = fs.readFileSync(inputPath);
+        const encoded = xorEncode(buffer);
+        fs.writeFileSync(outputPath, encoded);
+        
+        const displayPath = inputPath.replace(SOURCES_DIR, '').replace(/^\\|^\//, '');
+        console.log(`[OK]   ${displayPath} -> ${fileName}${OUTPUT_EXT} (${(encoded.length / 1024).toFixed(1)} KB)`);
         return true;
     } catch (err) {
-        console.error(`[ERR]  ${file}: ${err.message}`);
+        console.error(`[BŁĄD] ${inputPath}:`, err.message);
         return false;
     }
 }
 
-function convertAll(showSkipped = false) {
-    if (!fs.existsSync(SOURCES_DIR)) {
-        fs.mkdirSync(SOURCES_DIR, { recursive: true });
-        console.log('Utworzono folder: assets/models/sources/');
-        console.log('Wrzuć tam pliki .glb i uruchom ponownie.\n');
-        return;
-    }
-
-    const files = fs.readdirSync(SOURCES_DIR);
-    const glbFiles = files.filter(f => f.toLowerCase().endsWith('.glb'));
+function convertAll() {
+    console.log('--- KROK 2: Konwersja i szyfrowanie ---');
+    const glbFiles = getAllGlbFiles(SOURCES_DIR);
 
     if (glbFiles.length === 0) {
-        console.log('Brak plików .glb w assets/models/sources/');
+        console.log('Brak plików .glb w folderze sources do konwersji.');
         return;
     }
 
@@ -80,44 +124,16 @@ function convertAll(showSkipped = false) {
         if (result === true) converted++;
         else if (result === 'skip') {
             skipped++;
-            if (showSkipped) console.log(`[SKIP] ${file} (aktualny)`);
         }
     }
 
-    console.log(`\nGotowe: ${converted} nowych, ${skipped} aktualnych`);
-}
-
-function watchMode() {
-    console.log('=== Tryb nasłuchiwania ===');
-    console.log(`Obserwuję: ${SOURCES_DIR}`);
-    console.log('Wrzuć plik .glb - automatycznie się skonwertuje.');
-    console.log('Ctrl+C aby zakończyć.\n');
-
-    // Pierwsza konwersja
-    convertAll();
-
-    // Nasłuchuj zmian
-    fs.watch(SOURCES_DIR, (eventType, filename) => {
-        if (filename && filename.toLowerCase().endsWith('.glb')) {
-            console.log(`\n[ZMIANA] ${filename}`);
-            setTimeout(() => convertFile(filename), 100); // małe opóźnienie dla zapisu
-        }
-    });
+    console.log(`\\nPodsumowanie: Utworzono/Zaktualizowano ${converted} modeli. Pominięto ${skipped} (już aktualne). Łącznie przetworzono ${glbFiles.length} plików.`);
 }
 
 function main() {
-    const args = process.argv.slice(2);
-
-    console.log('=== Konwersja GLB -> SGM ===\n');
-
-    if (args.includes('--watch') || args.includes('-w')) {
-        watchMode();
-    } else if (args.find(a => a.endsWith('.glb'))) {
-        const file = args.find(a => a.endsWith('.glb'));
-        convertFile(file);
-    } else {
-        convertAll(args.includes('-v'));
-    }
+    console.log('=== AUTO-ORGANIZACJA I KONWERSJA MODELI ===\\n');
+    organizeFiles();
+    convertAll();
 }
 
 main();
