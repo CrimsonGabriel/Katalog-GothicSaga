@@ -107,15 +107,13 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // --- INTELIGENTNE WYCIĄGANIE NUMERU TIERU ---
-            // Upewniamy się, że do filtra dataset trafi zawsze jednolity format, np. "1", "2", "3"
             let tierNum = "";
             let rawTier = model.tier;
             if (rawTier !== undefined && rawTier !== null && String(rawTier).trim() !== '' && String(rawTier).toUpperCase() !== 'BRAK') {
-                tierNum = String(rawTier).trim().replace(/^T/i, ''); // Usuwa 'T' lub 't' z przodu, jeśli jest
+                tierNum = String(rawTier).trim().replace(/^T/i, '');
             }
 
             if (tierNum) {
-                // Do filtru zapisujemy np "T1" - założyłem że twoje guziki mają wpisane "T1" w data-tier
                 card.setAttribute("data-tier", "T" + tierNum); 
             }
             if (model.hands) card.setAttribute("data-hands", model.hands);
@@ -242,25 +240,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             { label: 'Obrona Magia', val: model.resistance_magic },
                             { label: 'Obrona Ogień', val: model.resistance_fire },
                             { label: 'Obrona Upadek', val: model.resistance_fall }
-                        ]
-                    },
-                    {
-                        title: "Dane Systemowe",
-                        items: [
-                            { label: 'Można okraść', val: model.canRob },
-                            { label: 'Podatek Silden (%)', val: model.taxSilden },
-                            { label: 'Podatek Geldern (%)', val: model.taxGeldern },
-                            { label: 'Main Flaga', val: model.mainFlag },
-                            { label: 'Flaga', val: model.flaga },
-                            { label: 'Item Type', val: model.itemType },
-                            { label: 'Item Group Type', val: model.itemGroupType },
-                            { label: 'Stackowalne', val: model.stackable },
-                            { label: 'Ukrywa Nick', val: model.hideNick },
-                            { label: 'Czas Wygaśnięcia', val: model.expirationTime },
-                            { label: 'Ranga Admina', val: model.adminRank },
-                            { label: 'Instancja [OLD]', val: model.instance },
-                            { label: 'Instancja [SAGA3]', val: model.instancesaga3 },
-                            { label: 'Visual Instance', val: model.visualInstance }
                         ]
                     }
                 ];
