@@ -8,7 +8,7 @@ const professionToFileMap = {
     'Alchemik': 'alchemik.json',
     'Drwal': 'drwal.json',
     'Górnik': 'gornik.json',
-    'Hutnik': 'hutnik.json',
+    'Metalurg': 'metalurg.json',
     'Kaletnik': 'kaletnik.json',
     'Kucharz': 'kucharz.json',
     'Kuśnierz': 'kusnierz.json',

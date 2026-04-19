@@ -123,6 +123,14 @@ header {
     color: #fff;
     padding: 20px;
     text-align: center;
+    
+    /* Zostawiamy sticky: */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    
+    /* Całkowicie przezroczyste tło: */
+    background-color: transparent; 
 }
 
 .model-grid {
