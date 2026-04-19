@@ -8,7 +8,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    background-color: transparent; /* To usunie czarne tło i odsłoni zblurowane obrazki pod spodem! */
 }
 h2 {
   display: block;
@@ -120,7 +120,7 @@ h2 {
 }
 
 header {
-    color: #fff;
+    color: #e6dcb8; /* Zmiana na gotycki pergaminowy biały/żółty */
     padding: 20px;
     text-align: center;
     
@@ -151,25 +151,24 @@ header {
   font-family: 'Gothicll';
   font-size: 10px;
   font-weight: bold;
-  color: white;
+  color: #e6dcb8; /* Kolor czcionki gotyckiej */
   z-index: 0;
 }
 
 .one-handed {
-  background-color: #A9A9A9;
+  background-color: #4a5822; /* Oliwkowy */
 }
 
 .two-handed {
-  background-color: #C0C0C0;
+  background-color: #7b8f3b; /* Jasny oliwkowy */
 }
 
 .model-card {
-  position: relative; /* Dodaj to, aby znacznik był pozycjonowany względem karty */
-  /* Reszta istniejących stylów pozostaje bez zmian */
-  background-color: rgba(0, 0, 0, 0.607);
-  border: 1px solid #ddd;
+  position: relative; 
+  background-color: rgba(15, 20, 10, 0.75); /* Zmiana na ciemną zieleń/czerń z Gothica */
+  border: 1px solid #4a5822; /* Gotycka ramka */
   border-radius: 8px;
-  color: #ffffff;
+  color: #e6dcb8;
   margin: 10px;
   padding: 20px;
   width: 200px;
@@ -190,33 +189,20 @@ header {
   font-family: 'Gothicll';
   font-size: 10px;
   font-weight: bold;
-  color: white;
+  color: #e6dcb8;
   z-index: 0;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(230, 220, 184, 0.2);
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.tier-t0 {
-  background-color: #666666; 
-}
-.tier-t1 {
-  background-color: #34A853; 
-}
-.tier-t2 {
-  background-color: #FBBC04;
-}
-.tier-t3 {
-  background-color: #FF6D01; 
-}
-.tier-t4 {
-  background-color: #EA4335; 
-}
-.tier-t5 {
-  background-color: #FF0000; 
-}
-
-
+/* Tier tags delikatnie stonowane by pasowały do brudu Gothica */
+.tier-t0 { background-color: #444444; }
+.tier-t1 { background-color: #3b5224; }
+.tier-t2 { background-color: #a3821a; }
+.tier-t3 { background-color: #b35a10; }
+.tier-t4 { background-color: #8b2626; }
+.tier-t5 { background-color: #5c1414; }
 
 #model-viewer {
     display: none;
@@ -225,7 +211,7 @@ header {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(10, 12, 8, 0.9); /* Mroczniejsze tło */
     justify-content: center;
     align-items: center;
 }
@@ -240,10 +226,10 @@ header {
     top: 20px;
     right: 20px;
     padding: 10px;
-    background-color: rgba(255, 0, 0, 0.553);
+    background-color: rgba(139, 38, 38, 0.7); /* Gotycka czerwień wyjścia z gry */
     font-family: 'Gothicll';
-    color: #ffffff;
-    border: none;
+    color: #e6dcb8; /* Pergaminowy napis */
+    border: 1px solid rgba(230, 220, 184, 0.3);
     border-radius: 5px;
     cursor: pointer;
 	z-index: 9999;
@@ -255,35 +241,36 @@ header {
 .category-button {
     padding: 10px 20px;
     margin: 5px;
-    background-color: #444;
-    color: #fff;
+    background-color: #4a5822; /* Oliwkowy */
+    color: #e6dcb8;
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
 .category-button:hover {
-    background-color: #555;
+    background-color: #7b8f3b; /* Jasny oliwkowy hover */
 }
-
 
 #model-info {
     position: absolute;
     bottom: 20px;
     left: 20px;
-    background-color: rgba(124, 119, 119, 0.132);
+    background-color: rgba(20, 25, 15, 0.85); /* Ciemno oliwkowe tło info */
     font-family: 'Gothicll';
     font-size: 14px;
-    color: #ffffff;
+    color: #e6dcb8;
     padding: 20px;
     border-radius: 8px;
     max-width: 300px;
     z-index: 10;
+    border: 1px solid #4a5822;
 }
 
 #model-title {
     margin: 0;
     font-size: 1.5em;
+    color: #f2eabf;
 }
 
 #model-description {
@@ -292,10 +279,11 @@ header {
     white-space: pre-line;
 }
 
+/* GŁÓWNE PRZYCISKI - zachowujemy kropki i gradienty, zmieniamy zmienne kolorów */
 .button {
-    --main-color: rgb(255, 255, 255);
-    --main-bg-color: rgb(0, 0, 0);
-    --pattern-color: rgba(82, 78, 78, 0.055);
+    --main-color: #e6dcb8; /* Zmiana na gotycki biały */
+    --main-bg-color: rgba(74, 88, 34, 0.9); /* Zmiana na oliwkowy bazowy */
+    --pattern-color: rgba(0, 0, 0, 0.25); /* Wzmocnienie kontrastu siatki */
     font-family: 'Gothicll';
     filter: hue-rotate(0deg);
     cursor: pointer;
@@ -304,7 +292,7 @@ header {
     background: radial-gradient(
         circle,
         var(--main-bg-color) 0%,
-        rgba(251, 0, 0, 0) 95%
+        rgba(30, 40, 15, 0) 95% /* Ciemniejsza zieleń zanikająca */
       ),
       linear-gradient(var(--pattern-color) 1px, transparent 1px),
       linear-gradient(to right, var(--pattern-color) 1px, transparent 1px);
@@ -319,7 +307,7 @@ header {
     border-image: radial-gradient(
         circle,
         var(--main-color) 0%,
-        rgba(74, 199, 122, 0) 100%
+        rgba(123, 143, 59, 0) 100% /* Oliwkowa ramka */
       )
       1;
     border-width: 1px 0 1px 0;
@@ -335,16 +323,17 @@ header {
       cover,
       10px 10px,
       10px 10px;
+    --main-bg-color: rgba(123, 143, 59, 0.9); /* Rozjaśnienie na hoverze */
 }
 
 .button:active {
-    filter: hue-rotate(250deg);
-    background-color: rgba(255, 255, 255, 0.1);
-    color: rgb(46, 213, 115);
+    filter: hue-rotate(0deg); /* Usuwamy tęczową rotację */
+    background-color: rgba(139, 38, 38, 0.5); /* Czerwień w stylu 'Wyjdź z gry' */
+    color: #ffdddd;
     border-image: radial-gradient(
         circle,
-        rgb(46, 213, 115) 0%,
-        rgba(74, 199, 122, 0) 100%
+        rgb(180, 50, 50) 0%,
+        rgba(139, 38, 38, 0) 100%
       )
       1;
 }
@@ -371,13 +360,12 @@ header {
   border: 0;
 }
 
-  
   .styled-wrapper .buttonq:before {
     content: "";
     position: absolute;
     border-radius: 50%;
     inset: 7px;
-    border: 3px solid rgb(255, 255, 255);
+    border: 3px solid #e6dcb8; /* Jasny pergaminowy obrys zamiast czystej bieli */
     transition:
       opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1   ) 80ms,
       transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
@@ -388,7 +376,7 @@ header {
     position: absolute;
     border-radius: 50%;
     inset: 7px;
-    border: 4px solid #599a53;
+    border: 4px solid #7b8f3b; /* Gotycka zieleń po najechaniu, zamiast neonowej zieleni */
     transform: scale(1.3);
     transition:
       opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
@@ -427,7 +415,7 @@ header {
     height: 30px;
     margin: 24px 18px 0 22px;
     transform: rotate(360deg);
-    fill: #f0eeef;
+    fill: #e6dcb8; /* Zmiana koloru strzałek by pasowały do gotyku */
   }
   
   .styled-wrapper .buttonq:hover .buttonq-box,
@@ -435,9 +423,10 @@ header {
     transition: 0.4s;
     transform: translateX(-69px);
   }
+
   .spinner {
-    border: 4px solid rgba(255, 255, 255, 0.3);
-    border-top: 4px solid #ffffff;
+    border: 4px solid rgba(230, 220, 184, 0.3); /* Zmiana barwy loadera */
+    border-top: 4px solid #e6dcb8;
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -451,12 +440,8 @@ header {
 }
 
 @keyframes spin {
-    0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-    }
-    100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-    }
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
 .search-wrapper {
@@ -470,29 +455,29 @@ header {
     padding: 8px 14px;
     font-size: 14px;
     border-radius: 20px;
-    border: none;
+    border: 1px solid #4a5822; /* Oliwkowa ramka szukania */
     outline: none;
-    background-color: rgba(0,0,0,0.75);
-    color: white;
+    background-color: rgba(15, 20, 10, 0.85); /* Zielono-czarne tło */
+    color: #e6dcb8;
     width: 250px;
     transition: background-color 0.3s ease;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Gothicll', sans-serif; /* Zmiana na gotycką czcionkę w polu wyszukiwania */
 }
 
 #search-bar::placeholder {
-    color: #ccc;
+    color: #8c8a77; /* Ciemniejszy odcień pergaminu */
 }
 
 #search-bar:focus {
     width: 275px;
-    background-color: rgba(20,20,20,0.95);
+    background-color: rgba(25, 30, 15, 0.95);
 }
 
 #search-status {
   width: 100%;
   text-align: center;
   font-family: 'Gothicll';
-  color: #fff;
+  color: #e6dcb8; /* Zmiana koloru */
   font-size: 18px;
   margin-bottom: 10px;
   text-shadow: 0 0 4px #000;
@@ -503,7 +488,7 @@ header {
   text-align: center;
   font-family: 'Gothicll';
   font-size: 32px;
-  color: #ff5555;
+  color: #c94b4b; /* Gotycka brudna czerwień */
   margin-top: 30px;
   text-shadow: 1px 1px 4px #000;
   display: none;
@@ -515,7 +500,6 @@ header {
   gap: 6px;
 }
 
-
 .filter-section {
   display: flex;
   align-items: center;
@@ -525,7 +509,7 @@ header {
 
 .filter-label {
   font-family: 'Gothicll';
-  color: #fff;
+  color: #e6dcb8; /* Zmiana koloru */
   font-size: 12px;
   margin-right: 5px;
 }
@@ -534,22 +518,22 @@ header {
   font-family: 'Gothicll';
   font-size: 13px;
   padding: 4px 10px;
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(74, 88, 34, 0.3); /* Lekki oliwkowy */
+  color: #e6dcb8;
+  border: 1px solid rgba(123, 143, 59, 0.5); /* Jasna oliwka */
   border-radius: 4px;
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .filter-button:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(123, 143, 59, 0.6);
 }
 
 .filter-button.active {
-  background: rgba(255, 50, 50, 0.25);
-  border: 1px solid rgba(255, 80, 80, 0.8);
-  box-shadow: 0 0 6px rgba(255, 50, 50, 0.7);
+  background: rgba(139, 38, 38, 0.5); /* Aktywny filtr na gotycką czerwień */
+  border: 1px solid rgba(180, 50, 50, 0.8);
+  box-shadow: 0 0 6px rgba(180, 50, 50, 0.7);
 }
 
 body.viewer-open .search-wrapper,
@@ -575,12 +559,12 @@ body.scrolling-hide .category-buttons {
 #side-filters {
   position: fixed;
   top: 60px;
-  right: -325px; /* głębiej schowane */
+  right: -325px;
   width: 300px;
   min-height: 75px;
-  background: rgba(10,10,10,0.95);
-  border-left: 2px solid rgba(255,255,255,0.2);
-  box-shadow: -4px 0 8px rgba(0,0,0,0.4);
+  background: rgba(15, 20, 10, 0.95); /* Zmiana na ciemno-zielone tło menu z Gothica */
+  border-left: 2px solid #7b8f3b; /* Oliwkowa ramka oddzielająca menu */
+  box-shadow: -4px 0 8px rgba(0,0,0,0.6);
   padding: 10px;
   border-radius: 8px 0 0 8px;
   transition: right 0.3s ease;
@@ -593,14 +577,13 @@ body.scrolling-hide .category-buttons {
   right: 0;
 }
 
-
 #filter-toggle-tab {
   position: fixed;
-  top: 110px; /* nie środek – góra */
+  top: 110px; 
   right: 0;
   transform: translateY(0%);
-  background: rgba(200, 0, 0, 0.9);
-  color: white;
+  background: rgba(74, 88, 34, 0.9); /* Zmiana koloru z czerwonego na oliwkowy */
+  color: #e6dcb8;
   font-size: 18px;
   font-weight: bold;
   padding: 6px 10px;
@@ -608,6 +591,7 @@ body.scrolling-hide .category-buttons {
   border-radius: 8px 0 0 8px;
   z-index: 1001;
   transition: transform 0.3s ease;
+  border: 1px solid rgba(123, 143, 59, 0.5); /* Dodana delikatna ramka */
 }
 
 #side-filters.open #filter-toggle-tab {
@@ -624,8 +608,6 @@ body.scrolling-hide #side-filters {
   transition: opacity 0.3s ease;
 }
 
-
-
 .alphabet-filters {
     display: flex;
     flex-wrap: wrap;
@@ -638,4 +620,3 @@ body.scrolling-hide #side-filters {
     min-width: 30px; 
     text-align: center;
 }
-
