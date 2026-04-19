@@ -8,29 +8,7 @@
   <link rel="icon" href="../sg.ico" type="image/webp" />
 </head>
 <body>
-  <div class="background"></div>
-  <div class="logo-container">
-    <div class="logo-line">
-      <img src="../assets/img/logo.webp" alt="logo" class="logo-image" />
-      <span class="logo-text">Od Sagan studio</span>
-    </div>
-    <div class="logo-line">
-      <img src="../assets/img/msciciel.webp" alt="sigma" class="logo-image" />
-      <span class="logo-text">Podjebane od sigmy Msciciel </span>
-    </div>
-    <div class="logo-line">
-      <img src="../assets/img/gpt.webp" alt="syzyf" class="logo-image" />
-      <span class="logo-text">Robione przez Gepetto</span>
-    </div>
-	<div class="logo-line">
-      <img src="../assets/img/gemini.webp" alt="syzyf2" class="logo-image">
-      <span class="logo-text">Kontynuacja z Gemini</span>
-    </div>
-    <div class="logo-line">
-      <img src="../assets/img/crimson.webp" alt="cwel" class="logo-image" />
-      <span class="logo-text">Podpisane przez cwela Crimson </span>
-    </div>
-  </div>
+  <div id="credits-placeholder"></div>
   <div class="styled-wrapper">
   <button class="buttonq" onclick="window.location.href='../index.html'">
     <div class="buttonq-box">
@@ -64,4 +42,12 @@
 	
   </section>
 </body>
+<script>
+  // Skrypt ładujący zewnętrzny plik HTML
+  fetch('../credits.html') // upewnij się, że ścieżka jest poprawna (jeśli kowal.html jest w folderze, daj '../credits.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('credits-placeholder').innerHTML = data;
+    });
+</script>
 </html>
