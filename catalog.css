@@ -120,16 +120,15 @@ h2 {
 }
 
 header {
-    color: #e6dcb8; /* Zmiana na gotycki pergaminowy biały/żółty */
-    padding: 20px;
+    color: #e6dcb8; 
+    /* KLUCZOWE: Zwiększamy boczne marginesy (130px po bokach).
+       Tworzy to pustą "strefę buforową" dla domku i strzałki, żeby kategorie nigdy na nie nie wjechały! */
+    padding: 20px 130px; 
     text-align: center;
     
-    /* Zostawiamy sticky: */
     position: sticky;
     top: 0;
     z-index: 1000;
-    
-    /* Całkowicie przezroczyste tło: */
     background-color: transparent; 
 }
 
@@ -345,6 +344,7 @@ header {
   top: 20px;
   left: 20px;
   z-index: 10;
+  transition: opacity 0.3s ease; /* DODANE: Płynne znikanie i pojawianie */
 }
 
 .styled-wrapper .buttonq {
@@ -602,7 +602,8 @@ body.scrolling-hide .search-wrapper,
 body.scrolling-hide .filters-wrapper,
 body.scrolling-hide .category-buttons,
 body.scrolling-hide #filter-toggle-tab,
-body.scrolling-hide #side-filters {
+body.scrolling-hide #side-filters,
+body.scrolling-hide .styled-wrapper { /* DODANE: Ukrywanie domku i strzałki powrotu */
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
@@ -619,4 +620,103 @@ body.scrolling-hide #side-filters {
     flex: 0 0 calc(10% - 5px); 
     min-width: 30px; 
     text-align: center;
+}
+
+/* =====================================================================
+   MEDIA QUERIES - PEŁNA RESPONSYWNOŚĆ (TELEFONY, TABLETY, ŚREDNIE OKNA)
+   ===================================================================== */
+
+/* 1. ŚREDNIE EKRANY (Zmniejszone okna przeglądarki, małe laptopy - do 1100px) */
+@media (max-width: 1100px) {
+    header {
+        padding: 15px 90px; /* Zmniejszamy strefę buforową, by oszczędzić miejsce */
+    }
+    .styled-wrapper {
+        top: 15px;
+        left: 15px;
+    }
+    .button {
+        padding: 10px 18px; /* Przyciski kategorii robią się odrobinę mniejsze */
+        font-size: 0.85rem;
+    }
+}
+
+/* 2. TABLETY I DUŻE TELEFONY (do 768px szerokości) */
+@media (max-width: 768px) {
+    header {
+        padding: 15px 10px; /* Całkowicie usuwamy ogromne marginesy na komórkach */
+        display: flex;
+        flex-direction: column; /* Ustawiamy elementy w pionie (jedno pod drugim) */
+        align-items: center;
+    }
+
+    /* Odczepiamy domek i powrót od krawędzi okna, układamy je centralnie nad kategoriami */
+    .styled-wrapper {
+        position: relative;
+        top: 0;
+        left: 0;
+        margin-bottom: 10px;
+        justify-content: center;
+    }
+
+    .styled-wrapper .buttonq {
+        width: 55px;
+        height: 55px;
+    }
+
+    /* Kategorie zyskują pełną elastyczność */
+    .category-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .button {
+        padding: 10px 15px;
+        font-size: 0.8rem;
+        margin: 2px;
+    }
+
+    /* Karty modeli skalują się, by zmieścić 2 kolumny na telefonie */
+    .model-card {
+        width: 130px;
+        padding: 15px 10px;
+        margin: 5px;
+    }
+
+    /* Boczny panel filtrów zwężony pod ekrany komórek */
+    #side-filters {
+        width: 250px;
+        right: -270px;
+    }
+
+    /* Okienko informacyjne wyśrodkowane na dole */
+    #model-info {
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: none;
+        padding: 15px;
+        font-size: 12px;
+    }
+}
+
+/* 3. BARDZO WĄSKIE TELEFONY PIONOWE (do 480px szerokości) */
+@media (max-width: 480px) {
+    .button {
+        flex-grow: 1; /* Przyciski ładnie rozciągają się na pozostałą pustą przestrzeń */
+        text-align: center;
+    }
+
+    .model-card {
+        width: 110px; /* Jeszcze mniejsze karty modeli */
+    }
+
+    #filter-toggle-tab {
+        font-size: 16px;
+        padding: 8px 12px;
+        top: 90px;
+    }
 }
