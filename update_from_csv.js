@@ -5,12 +5,13 @@ const { parse } = require('csv-parse');
 const csvFilePath = 'Itemki.csv';
 const jsonFilePath = './assets/dane/tymczasowy.json'; 
 
+// ZAKTUALIZOWANE NAGŁÓWKI O NOWE KOLUMNY
 const CSV_HEADERS = [
-    'Nazwa', 'KOSZT', 'Opis', 'Main Flaga', 'Flaga', 'ItemCategory', 'ItemType', 'ItemGroupType',
+    'Nazwa', 'KOSZT', 'KOSZ Z MARŻĄ', 'Pomiń marże', 'Opis', 'Main Flaga', 'Flaga', 'ItemCategory', 'ItemType', 'ItemGroupType',
     'PLIK', 'Stackowanie', 'Instancja[OLD]', 'visualInstance', 'Instancja [SAGA3]', 'Waga',
     'Tier', 'adminRank', 'hideNick', 'Liczba użyć', 'Stamina 1 Hit', 'HP 1 hit', 'Mana 1 Hit',
     'Stamina', 'HP', 'MANA', 'Rodzaj Obrażeń', 'DMG', 'Zasięg', 'W: Siła', 'W: Zręczność',
-    'W: Inteligencja', 'healing_tick', 'efekt czaru', 'Instancja przemiany', 'HP przemiany',
+    'W: Inteligencja', 'healing_tick', 'efekt czaru', 'Instancja przemiany', 'Mob pokojowy', 'HP przemiany',
     'W: Krąg', 'W: Mana', 'runeType', 'Przedmiot do naprawy', 'Wytrzymałość', 'canRob',
     'Podatek Silden %', 'Podatek Geldern %', 'expirationTime', 'foodType', 'enduranceCost',
     'arrowSpeed', 'Obuchowa', 'Pociski', 'Sieczna', 'Magia', 'Ogień', 'Upadek', 'Profesja',
@@ -83,11 +84,10 @@ async function processData() {
         // POBIERANIE WARTOŚCI "Do katalogu?"
         const doKatalogu = String(cleanValue(row['Do katalogu?'])).toUpperCase();
         
-        // --- POPRAWIONA LOGIKA FILTROWANIA ---
         // Akceptujemy TRUE, PRAWDA oraz 1
         if (doKatalogu !== 'TRUE' && doKatalogu !== 'PRAWDA' && doKatalogu !== '1') {
             skippedCount++;
-            continue; // Przeskakujemy przedmiot, jeśli wartość jest inna (np. FALSE)
+            continue; // Przeskakujemy przedmiot
         }
 
         const instanceOld = cleanValue(row['Instancja[OLD]'])?.toUpperCase();
@@ -102,7 +102,7 @@ async function processData() {
 
         const itemData = {};
         const mappings = {
-            'Nazwa': 'name', 'KOSZT': 'cost', 'Opis': 'opis', 'Main Flaga': 'mainFlag',
+            'Nazwa': 'name', 'KOSZT': 'cost', 'KOSZ Z MARŻĄ': 'costWithMargin', 'Pomiń marże': 'skipMargin', 'Opis': 'opis', 'Main Flaga': 'mainFlag',
             'Flaga': 'flaga', 'ItemCategory': 'category', 'ItemType': 'itemType',
             'ItemGroupType': 'itemGroupType', 'PLIK': 'plik', 'Stackowanie': 'stackable',
             'Instancja[OLD]': 'instance', 'visualInstance': 'visualInstance',
@@ -112,7 +112,7 @@ async function processData() {
             'Stamina': 'stamina', 'HP': 'hp', 'MANA': 'mana', 'Rodzaj Obrażeń': 'dmgType',
             'DMG': 'dmg', 'Zasięg': 'range', 'W: Siła': 'strength', 'W: Zręczność': 'dexterity',
             'W: Inteligencja': 'intelligence', 'healing_tick': 'healingTick', 'efekt czaru': 'spellEffect',
-            'Instancja przemiany': 'transformationInstance', 'HP przemiany': 'transformationHp',
+            'Instancja przemiany': 'transformationInstance', 'Mob pokojowy': 'peacefulMob', 'HP przemiany': 'transformationHp',
             'W: Krąg': 'magicCircle', 'W: Mana': 'manaCost', 'runeType': 'runeType',
             'Przedmiot do naprawy': 'repairItem', 'Wytrzymałość': 'durability', 'canRob': 'canRob',
             'Podatek Silden %': 'taxSilden', 'Podatek Geldern %': 'taxGeldern', 'expirationTime': 'expirationTime',
