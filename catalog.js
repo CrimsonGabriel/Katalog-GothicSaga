@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         title: "Informacje Podstawowe",
                         items: [
                             { label: 'Opis', val: model.opis },
-                            { label: 'Koszt', val: model.cost },
+                           // { label: 'Koszt', val: model.cost },
                             { label: 'Waga', val: model.weight },
                             { label: 'Tier', val: tierNum ? `T${tierNum}` : null },
                             { label: 'Profesja', val: model.profession },
