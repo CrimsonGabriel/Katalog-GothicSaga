@@ -79,7 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (model.instance) card.setAttribute("data-instance", model.instance);
 
-            // Logika atrybutów dla filtrów
             if (model.instancesaga3) {
                 const i3 = model.instancesaga3.toUpperCase();
                 if (i3.includes('2H')) card.setAttribute("data-hands", "2H");
@@ -106,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (dType) card.setAttribute("data-dmg", dType);
             }
 
-            // --- INTELIGENTNE WYCIĄGANIE NUMERU TIERU ---
             let tierNum = "";
             let rawTier = model.tier;
             if (rawTier !== undefined && rawTier !== null && String(rawTier).trim() !== '' && String(rawTier).toUpperCase() !== 'BRAK') {
@@ -127,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const title = document.createElement('h2');
             title.textContent = isNameAvailable ? model.name : model.title;
             
-            // --- WYŚWIETLANIE TAGU TIERU NA KARTACH ---
             if (tierNum) {
                 const tierTag = document.createElement('div');
                 tierTag.classList.add('tier-tag', `tier-t${tierNum}`);
@@ -159,18 +156,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (descEl) descEl.textContent = model.description || '';
 
                 const detailsContainer = document.getElementById('model-details-container');
-                if (!detailsContainer) {
-                    console.error('Błąd: Nie znaleziono elementu <div id="model-details-container"></div> w HTML!');
-                    return;
-                }
+                if (!detailsContainer) return;
                 detailsContainer.innerHTML = ''; 
+
+                // --- LOGIKA WYBORU CENY ---
+                let rawPrice = model.costWithMargin; // Domyślnie bierzemy z marżą
+                const skip = String(model.skipMargin).toUpperCase();
+                if (skip === 'PRAWDA' || skip === 'TRUE') {
+                    rawPrice = model.cost; // Jeśli pomijamy, bierzemy bazowy koszt
+                }
+
+                // --- NOWA LOGIKA ZAOKRĄGLANIA MATEMATYCZNEGO ---
+                let finalCost = rawPrice;
+                if (rawPrice && rawPrice !== 'BRAK') {
+                    // Zamieniamy przecinek na kropkę, parsujemy na liczbę i zaokrąglamy
+                    const priceNum = parseFloat(String(rawPrice).replace(',', '.'));
+                    if (!isNaN(priceNum)) {
+                        finalCost = Math.round(priceNum); // Zaokrąglanie zgodnie z zasadami matematyki
+                    }
+                }
 
                 const detailGroups = [
                     {
                         title: "Informacje Podstawowe",
                         items: [
                             { label: 'Opis', val: model.opis },
-                           // { label: 'Koszt', val: model.cost },
+                            { label: 'Szacowany Koszt', val: finalCost }, // Wyświetla zaokrągloną cenę
                             { label: 'Waga', val: model.weight },
                             { label: 'Tier', val: tierNum ? `T${tierNum}` : null },
                             { label: 'Profesja', val: model.profession },
@@ -208,6 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             { label: 'Koszt Many', val: model.manaCost },
                             { label: 'Typ Runy', val: model.runeType },
                             { label: 'Efekt Czaru', val: model.spellEffect },
+                            { label: 'Mob pokojowy', val: model.peacefulMob },
                             { label: 'Instancja Przemiany', val: model.transformationInstance },
                             { label: 'HP Przemiany', val: model.transformationHp },
                             { label: 'Leczenie (Tick)', val: model.healingTick }
@@ -321,10 +333,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const title = card.dataset.title || "";
             const matchSearch = title.includes(query) || (card.dataset.instance || "").toLowerCase().includes(query);
             
-            // Logika sprawdzania tieru
             let matchTier = true;
             if (activeTier) {
-                // Konwersja by upewnic się, że np 'T1' dopasuje się do 'T1'
                 const filterVal = String(activeTier).toUpperCase().trim();
                 const cardVal = String(card.dataset.tier || "").toUpperCase().trim();
                 matchTier = (cardVal === filterVal);
