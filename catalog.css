@@ -659,9 +659,24 @@ body.scrolling-hide .styled-wrapper { /* DODANE: Ukrywanie domku i strzałki pow
         justify-content: center;
     }
 
+    @media (max-width: 768px) {
+    /* ... tutaj masz już kod zmniejszający button do 55x55 ... */
     .styled-wrapper .buttonq {
         width: 55px;
         height: 55px;
+    }
+
+    /* ---- DODAJ TO: Zmniejszenie ikonek i ich marginesów pod rozmiar 55px ---- */
+    .styled-wrapper .buttonq-elem {
+        width: 22px;
+        height: 22px;
+        margin: 15px 16px 0 16px; /* Wyśrodkowanie w mniejszym kółku */
+    }
+
+    /* ---- DODAJ TO: Krótszy dystans przesunięcia animacji strzałki ---- */
+    .styled-wrapper .buttonq:hover .buttonq-box,
+    .styled-wrapper .buttonq:focus .buttonq-box {
+        transform: translateX(-54px); /* Wcześniej było -69px, teraz jest dopasowane do 55x55 */
     }
 
     /* Kategorie zyskują pełną elastyczność */

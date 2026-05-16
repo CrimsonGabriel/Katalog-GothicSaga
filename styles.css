@@ -235,3 +235,157 @@ body {
   margin: 24px 18px 0 22px;
   fill: #f0eeef;
 }
+
+/* =====================================================================
+   MEDIA QUERIES - PEŁNA RESPONSYWNOŚĆ (TABLETY I TELEFONY)
+   ===================================================================== */
+
+/* 1. Ekrany średnie i małe laptopy (do 1024px) */
+@media (max-width: 1024px) {
+  .main-grid {
+    grid-template-columns: repeat(3, 1fr); /* Sztywno 3 kolumny */
+  }
+}
+
+/* 2. Tablety i duże telefony (do 768px) */
+@media (max-width: 768px) {
+  .main-title {
+    font-size: 2.5rem;
+    margin: 25px 0 15px 0;
+  }
+  .main-grid {
+    grid-template-columns: repeat(2, 1fr); /* Zmiana na 2 kolumny */
+    gap: 15px;
+    padding: 15px;
+  }
+  .logo-container {
+    gap: 12px;
+    padding: 10px;
+  }
+  .logo-image {
+    width: 25px;
+    height: 25px;
+  }
+  .logo-text {
+    font-size: 0.85rem;
+  }
+  .card-overlay {
+    font-size: 1.2rem;
+    padding: 10px 0;
+  }
+}
+
+/* 3. Standardowe telefony (do 480px) */
+@media (max-width: 480px) {
+  .logo-container {
+    flex-direction: column; /* Ustawienie creditsów jeden pod drugim! */
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .logo-line {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .main-title {
+    font-size: 2rem;
+  }
+
+  .main-grid {
+    grid-template-columns: repeat(2, 1fr); /* Zostają 2 kolumny dla wygody klikania */
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .card-overlay {
+    font-size: 1rem;
+    padding: 8px 0;
+  }
+}
+
+/* 4. Bardzo małe ekrany (np. stare telefony pionowo, do 360px) */
+@media (max-width: 360px) {
+  .main-grid {
+    grid-template-columns: 1fr; /* Ustawia kafelki idealnie pojedynczo, jeden pod drugim na cały ekran */
+  }
+  
+  .main-title {
+    font-size: 1.8rem;
+  }
+}
+/* =====================================================================
+   MEDIA QUERIES - PEŁNA RESPONSYWNOŚĆ (TABLETY I TELEFONY)
+   ===================================================================== */
+
+/* 1. Tablety i duże telefony (do 768px) */
+@media (max-width: 768px) {
+  /* Naprawa Creditsów - wyłączenie pozycjonowania absolutnego, żeby nie nachodziły na resztę */
+  .logo-container {
+    position: relative;
+    top: 0;
+    left: 0;
+    margin: 10px auto;
+    max-width: 90%;
+    flex-direction: row; /* Układa obok siebie... */
+    flex-wrap: wrap; /* ...i zawija do nowej linii jak braknie miejsca */
+    justify-content: center;
+    gap: 12px;
+  }
+  
+  .main-title {
+    font-size: 2.5rem;
+    margin: 10px 0 20px 0;
+  }
+
+  /* Naprawa Kafelków - zmiana z flexboxa (efekt rozsuwania z PC) na siatkę */
+  .main-grid {
+    display: grid; /* TO JEST KLUCZOWE - wymusza siatkę zamiast flexa na telefonie */
+    grid-template-columns: repeat(2, 1fr); /* Robi idealne 2 kolumny */
+    gap: 15px;
+    padding: 15px;
+    overflow-x: hidden;
+  }
+
+  .main-card {
+    width: 100%; /* Resetuje szerokość z PC */
+    height: 220px; /* Zmienia wielkie 700px w ładne, klikalne kafelki */
+  }
+
+  /* Resetujemy zachowanie po kliknięciu/najechaniu, żeby telefon nie próbował rozszerzać kafelka */
+  .main-card:hover {
+    width: 100%; 
+    transform: scale(1.02); /* Tylko delikatnie powiększa */
+  }
+
+  .card-overlay {
+    font-size: 1.2rem;
+  }
+}
+
+/* 2. Standardowe telefony (do 480px) */
+@media (max-width: 480px) {
+  .logo-container {
+    flex-direction: column; /* Ustawienie creditsów jeden pod drugim dla małych ekranów */
+    align-items: center;
+  }
+
+  .main-title {
+    font-size: 2rem;
+  }
+
+  .main-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 kolumny na małym telefonie */
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .main-card {
+    height: 180px; /* Kafelki dopasowane idealnie pod palec */
+  }
+  
+  .card-overlay {
+    font-size: 1rem;
+    padding: 8px 0;
+  }
+}
