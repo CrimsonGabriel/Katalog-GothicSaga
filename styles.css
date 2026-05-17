@@ -389,3 +389,33 @@ body {
     padding: 8px 0;
   }
 }
+/* =====================================================================
+   NAPRAWA PRZYCISKU HOME NA PODSTRONACH (TELEFONY I TABLETY)
+   ===================================================================== */
+@media (max-width: 768px) {
+  .styled-wrapper {
+    position: relative; /* Odpinamy guzik od lewego górnego rogu */
+    top: 0;
+    left: 0;
+    justify-content: center; /* Wyśrodkowanie kontenera */
+    margin: 10px auto; 
+    width: 100%;
+  }
+
+  .buttonq {
+    margin-left: 0 !important; /* TO JEST KLUCZ: resetuje te nieszczęsne 250px */
+    width: 55px;
+    height: 55px;
+  }
+
+  .buttonq-elem {
+    width: 22px;
+    height: 22px;
+    margin: 15px 16px 0 16px; /* Wyśrodkowanie ikonki domku w mniejszym kółku */
+  }
+
+  .buttonq:hover .buttonq-box,
+  .buttonq:focus .buttonq-box {
+    transform: translateX(-54px); /* Dopasowanie animacji do małego guzika */
+  }
+}
