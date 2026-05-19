@@ -1887,7 +1887,7 @@
     {
         "title": "KM_ITFO_SOUP01",
         "name": "Zupa rybna z ziołami",
-        "cost": "4.82",
+        "cost": "4.81",
         "costWithMargin": "5.73",
         "skipMargin": "FALSE",
         "opis": "Aromatyczna zupa przygotowana z różnych ryb i mieszanki świeżych ziół.",
@@ -2472,7 +2472,7 @@
     {
         "title": "ITFO_APPLEPIE",
         "name": "Jabłka w cieście",
-        "cost": "4.74",
+        "cost": "4.73",
         "costWithMargin": "6.18",
         "skipMargin": "FALSE",
         "opis": "Kawałki jabłek zanurzone w słodkim cieście i usmażone na złoty kolor.",
@@ -2602,7 +2602,7 @@
     {
         "title": "ITFO_SWEETBUN",
         "name": "Słodka drożdżówka",
-        "cost": "4.82",
+        "cost": "4.81",
         "costWithMargin": "6.07",
         "skipMargin": "FALSE",
         "opis": "Wypiek przygotowany z mąki, cukru i drożdży, idealny jako przekąska.",
@@ -3057,7 +3057,7 @@
     {
         "title": "ITFO_HONEYCOOKIES",
         "name": "Ciastka z miodem",
-        "cost": "18.23",
+        "cost": "18.22",
         "costWithMargin": "25.56",
         "skipMargin": "FALSE",
         "opis": "Wypiek zrobiony z mąki i miodu. Jest słodki i klejący.",

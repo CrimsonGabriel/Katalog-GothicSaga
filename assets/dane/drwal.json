@@ -1233,7 +1233,7 @@
         "visualInstance": "-",
         "instancesaga3": "ITMI_GS_COM_10",
         "weight": "0.5",
-        "tier": "1",
+        "tier": "0",
         "adminRank": "Gamemaster",
         "hideNick": "FALSE",
         "uses": "BRAK",
