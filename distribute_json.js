@@ -6,6 +6,7 @@ const outputDir = './assets/dane/';
 
 const professionToFileMap = {
     'Alchemik': 'alchemik.json',
+	'Crafting polowy': 'crafting polowy.json',
     'Drwal': 'drwal.json',
     'Górnik': 'gornik.json',
     'Metalurg': 'metalurg.json',

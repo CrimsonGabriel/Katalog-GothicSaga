@@ -1,2 +1,0 @@
-Responsywność na różnych rozdzielczościach ekranu
--Responsywność na urządzeniach mobilnych

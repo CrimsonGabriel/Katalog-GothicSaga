@@ -7,7 +7,7 @@ const jsonFilePath = './assets/dane/tymczasowy.json';
 
 // ZAKTUALIZOWANE NAGŁÓWKI O NOWE KOLUMNY
 const CSV_HEADERS = [
-    'Nazwa', 'KOSZT', 'KOSZ Z MARŻĄ', 'Pomiń marże', 'Opis', 'Main Flaga', 'Flaga', 'ItemCategory', 'ItemType', 'ItemGroupType',
+    'Nazwa', 'KOSZT', 'KOSZT Z MARŻĄ', 'Pomiń marże', 'Opis', 'Main Flaga', 'Flaga', 'ItemCategory', 'ItemType', 'ItemGroupType',
     'PLIK', 'Stackowanie', 'Instancja[OLD]', 'visualInstance', 'Instancja [SAGA3]', 'Waga',
     'Tier', 'adminRank', 'hideNick', 'Liczba użyć', 'Stamina 1 Hit', 'HP 1 hit', 'Mana 1 Hit',
     'Stamina', 'HP', 'MANA', 'Rodzaj Obrażeń', 'DMG', 'Zasięg', 'W: Siła', 'W: Zręczność',
@@ -102,7 +102,7 @@ async function processData() {
 
         const itemData = {};
         const mappings = {
-            'Nazwa': 'name', 'KOSZT': 'cost', 'KOSZ Z MARŻĄ': 'costWithMargin', 'Pomiń marże': 'skipMargin', 'Opis': 'opis', 'Main Flaga': 'mainFlag',
+            'Nazwa': 'name', 'KOSZT': 'cost', 'KOSZT Z MARŻĄ': 'costWithMargin', 'Pomiń marże': 'skipMargin', 'Opis': 'opis', 'Main Flaga': 'mainFlag',
             'Flaga': 'flaga', 'ItemCategory': 'category', 'ItemType': 'itemType',
             'ItemGroupType': 'itemGroupType', 'PLIK': 'plik', 'Stackowanie': 'stackable',
             'Instancja[OLD]': 'instance', 'visualInstance': 'visualInstance',
