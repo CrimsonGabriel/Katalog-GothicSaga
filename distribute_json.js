@@ -9,7 +9,7 @@ const professionToFileMap = {
 	'Crafting polowy': 'crafting polowy.json',
     'Drwal': 'drwal.json',
     'Górnik': 'gornik.json',
-    'Metalurg': 'metalurg.json',
+    'Hutnik': 'hutnik.json',
     'Kaletnik': 'kaletnik.json',
     'Kucharz': 'kucharz.json',
     'Kuśnierz': 'kusnierz.json',
@@ -64,12 +64,31 @@ async function distributeData() {
     let unassignedRecordsCount = 0;
 
     jsonData.forEach(item => {
-        // Dodano .trim(), by upewnić się, że białe znaki nie zepsują dopasowania z Excela
-        const profession = item.profession ? item.profession.trim() : null;
+        const professionStr = item.profession ? item.profession.trim() : null;
         
-        if (profession && professionToFileMap[profession]) {
-            distributedData[profession].push(item);
-            processedRecordsCount++;
+        if (professionStr) {
+            // Rozdzielamy profesje po znaku '/' i usuwamy białe znaki na brzegach
+            const professionsArray = professionStr.split('/').map(p => p.trim());
+            let assignedToAtLeastOne = false;
+
+            professionsArray.forEach(prof => {
+                // Znajdujemy odpowiedni klucz w mapie (ignorując wielkość liter)
+                // Uchroni nas to przed błędami typu "Crafting Polowy" vs "Crafting polowy"
+                const matchedKey = Object.keys(professionToFileMap).find(
+                    key => key.toLowerCase() === prof.toLowerCase()
+                );
+
+                if (matchedKey) {
+                    distributedData[matchedKey].push(item);
+                    assignedToAtLeastOne = true;
+                }
+            });
+
+            if (assignedToAtLeastOne) {
+                processedRecordsCount++;
+            } else {
+                unassignedRecordsCount++;
+            }
         } else {
             unassignedRecordsCount++;
         }
@@ -90,7 +109,7 @@ async function distributeData() {
     }
 
     console.log(`\nProces dystrybucji zakończony pomyślnie.`);
-    console.log(`Przetworzono łącznie ${processedRecordsCount} rekordów.`);
+    console.log(`Przetworzono łącznie ${processedRecordsCount} rekordów (niektóre mogły trafić do wielu plików).`);
     if (unassignedRecordsCount > 0) {
         console.log(`Pominięto ${unassignedRecordsCount} rekordów bez przypisanej profesji lub z nieznaną profesją.`);
     }

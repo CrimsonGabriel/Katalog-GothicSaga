@@ -5,17 +5,17 @@ const { parse } = require('csv-parse');
 const csvFilePath = 'Itemki.csv';
 const jsonFilePath = './assets/dane/tymczasowy.json'; 
 
-// ZAKTUALIZOWANE NAGŁÓWKI O NOWE KOLUMNY
+// ZAKTUALIZOWANE NAGŁÓWKI O NOWE KOLUMNY (Usunięto Craftowalne, Zdobywalne, Dla Gracza)
 const CSV_HEADERS = [
     'Nazwa', 'KOSZT', 'KOSZT Z MARŻĄ', 'Pomiń marże', 'Opis', 'Main Flaga', 'Flaga', 'ItemCategory', 'ItemType', 'ItemGroupType',
     'PLIK', 'Stackowanie', 'Instancja[OLD]', 'visualInstance', 'Instancja [SAGA3]', 'Waga',
     'Tier', 'adminRank', 'hideNick', 'Liczba użyć', 'Stamina 1 Hit', 'HP 1 hit', 'Mana 1 Hit',
     'Stamina', 'HP', 'MANA', 'Rodzaj Obrażeń', 'DMG', 'Zasięg', 'W: Siła', 'W: Zręczność',
-    'W: Inteligencja', 'healing_tick', 'efekt czaru', 'Instancja przemiany', 'Mob pokojowy', 'HP przemiany',
+    'W: Inteligencja', 'healing_tick', 'efekt czaru', 'Instancja przemiany', 'HP przemiany',
     'W: Krąg', 'W: Mana', 'runeType', 'Przedmiot do naprawy', 'Wytrzymałość', 'canRob',
     'Podatek Silden %', 'Podatek Geldern %', 'expirationTime', 'foodType', 'enduranceCost',
     'arrowSpeed', 'Obuchowa', 'Pociski', 'Sieczna', 'Magia', 'Ogień', 'Upadek', 'Profesja',
-    'Kategoria', 'model nazwa', 'Craftowalne', 'Zdobywalne', 'Dla Gracza', 'Do katalogu?'
+    'Kategoria', 'model nazwa', 'Do katalogu?'
 ];
 
 function cleanValue(value) {
@@ -112,15 +112,14 @@ async function processData() {
             'Stamina': 'stamina', 'HP': 'hp', 'MANA': 'mana', 'Rodzaj Obrażeń': 'dmgType',
             'DMG': 'dmg', 'Zasięg': 'range', 'W: Siła': 'strength', 'W: Zręczność': 'dexterity',
             'W: Inteligencja': 'intelligence', 'healing_tick': 'healingTick', 'efekt czaru': 'spellEffect',
-            'Instancja przemiany': 'transformationInstance', 'Mob pokojowy': 'peacefulMob', 'HP przemiany': 'transformationHp',
+            'Instancja przemiany': 'transformationInstance', 'HP przemiany': 'transformationHp',
             'W: Krąg': 'magicCircle', 'W: Mana': 'manaCost', 'runeType': 'runeType',
             'Przedmiot do naprawy': 'repairItem', 'Wytrzymałość': 'durability', 'canRob': 'canRob',
             'Podatek Silden %': 'taxSilden', 'Podatek Geldern %': 'taxGeldern', 'expirationTime': 'expirationTime',
             'foodType': 'foodType', 'enduranceCost': 'enduranceCost', 'arrowSpeed': 'arrowSpeed',
             'Obuchowa': 'resistance_blunt', 'Pociski': 'resistance_projectile', 'Sieczna': 'resistance_slash',
             'Magia': 'resistance_magic', 'Ogień': 'resistance_fire', 'Upadek': 'resistance_fall',
-            'Profesja': 'profession', 'Kategoria': 'kategoria', 'model nazwa': 'modelNazwa', 
-            'Craftowalne': 'craftable', 'Zdobywalne': 'obtainable', 'Dla Gracza': 'forPlayer'
+            'Profesja': 'profession', 'Kategoria': 'kategoria', 'model nazwa': 'modelNazwa'
         };
         
         for (const csvKey in mappings) {
