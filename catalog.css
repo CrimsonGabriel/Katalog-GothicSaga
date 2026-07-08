@@ -133,7 +133,7 @@ h2 {
 header {
     color: #e6dcb8; 
     /* KLUCZOWE: Zwiększamy boczne marginesy (130px po bokach).
-       Tworzy to pustą "strefę buforową" dla domku i strzałki, żeby kategorie nigdy na nie nie wjechały! */
+       Tworzy to pustą "strefę buforową"19 dla domku i strzałki, żeby kategorie nigdy na nie nie wjechały! */
     padding: 20px 130px; 
     text-align: center;
     

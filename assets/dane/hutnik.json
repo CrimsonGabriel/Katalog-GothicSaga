@@ -3241,7 +3241,7 @@
     },
     {
         "title": "NIEUFORMOWANY_METEORYTOWY_PRET",
-        "name": "Nieuformowany pręt z metorytowej stali",
+        "name": "Nieuformowany Pręt z meteorytowej stali",
         "cost": "99,00",
         "costWithMargin": "124,35",
         "skipMargin": "FAŁSZ",
@@ -3301,7 +3301,7 @@
     },
     {
         "title": "UFORMOWANY_METEORYTOWY_PRET",
-        "name": "Uformowany pręt z metorytowej stali",
+        "name": "Uformowany Pręt z meteorytowej stali",
         "cost": "101,50",
         "costWithMargin": "126,85",
         "skipMargin": "FAŁSZ",
@@ -3361,7 +3361,7 @@
     },
     {
         "title": "METEORYTOWY_PRET",
-        "name": "Pręt z metorytowej stali",
+        "name": "Pręt z meteorytowej stali",
         "cost": "35,00",
         "costWithMargin": "56,49",
         "skipMargin": "FAŁSZ",
