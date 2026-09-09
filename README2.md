@@ -1,5 +1,3 @@
-
-
 ## Gothic Saga – Interactive 3D Item Catalog
 An interactive, web-based 3D item catalog and crafting database developed for the **Gothic Saga** server. 
 It enables in-browser 3D asset inspection (WebGL/Three.js) across various crafting professions.
@@ -29,20 +27,3 @@ To protect server-side IP and custom assets:
 ## Author
 **Gabriel Piątek (Crimson)**  
 *Former Lead Technician at Gothic Saga*
-
-# Katalog Grinderski
-Katalog przedmiotów dla serwera Gothic Saga 3.
-
-## Struktura plików
-
-```
-katalog/
-├── assets/
-│   ├── models/
-│   │   ├── sources/     <- placeholder
-│   │   └── *.sgm        <- zakodowane modele
-│   ├── card/            <- miniatury
-│   └── dane/            <- JSON z danymi itemów
-├── catalog.js           <- główny skrypt
-└── zawody/              <- podstrony zawodów
-```
