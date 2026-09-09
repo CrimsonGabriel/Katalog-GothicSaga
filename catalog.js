@@ -1,10 +1,3 @@
-// Runtime model processor
-const _0x1a = [0x52, 0x31, 0x4d, 0x7a, 0x58, 0x30, 0x31, 0x50, 0x52, 0x45, 0x56, 0x4d];
-const _0x2b = (s) => atob(s).split('').map(c => c.charCodeAt(0));
-const _0x3c = () => _0x2b(String.fromCharCode(..._0x1a));
-let _k = null;
-const _i = () => { if (!_k) _k = _0x3c(); return _k; };
-const _d = (d) => { const a = new Uint8Array(d), k = _i(); for (let i = 0; i < a.length; i++) a[i] ^= k[i % k.length]; return a.buffer; };
 
 document.addEventListener('DOMContentLoaded', () => {
     const modelGrid = document.querySelector('.model-grid');
